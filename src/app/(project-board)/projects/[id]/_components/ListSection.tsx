@@ -1,67 +1,79 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { DndContext } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function ListSection() {
   const [isDragging, setIsDragging] = useState(false);
-  const [invoices, setInvoices] = useState([
+
+  const [taskList, setTaskList] = useState([
     {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
+      id: crypto.randomUUID(),
+      name: "Task 1",
+      assigne: "John Doe",
+      dueDate: "2023-01-01",
+      priority: "Medium",
+      status: "In Progress",
+      comments: "",
     },
     {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
+      id: crypto.randomUUID(),
+      name: "Task 2",
+      assigne: "Mary Doe",
+      dueDate: "2023-01-01",
+      priority: "Medium",
+      status: "In Progress",
+      comments: "",
     },
   ]);
 
+  const tableHeader = Object.keys(taskList[0])
+    .filter((key) => key !== "id")
+    .map((key) => {
+      if (key.includes("Date")) {
+        return {
+          [key]: "due date",
+        };
+      }
+      return {
+        [key]: key,
+      };
+    });
+
+  // Inside your ListSection component
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
+    const minIndex = 0; // minimum range (first item index)
+    const maxIndex = taskList.length - 1; // maximum range (last item index)
 
-    if (active.id !== over.id) {
-      const oldIndex = invoices.findIndex((item) => item.invoice === active.id);
-      const newIndex = invoices.findIndex((item) => item.invoice === over.id);
-      setInvoices(arrayMove(invoices, oldIndex, newIndex));
+    if (active?.id && over?.id && active.id !== over.id) {
+      const oldIndex = taskList.findIndex((item) => item.id === active.id);
+      let newIndex = taskList.findIndex((item) => item.id === over.id);
+
+      // Restrict the newIndex within range
+      newIndex = Math.min(Math.max(newIndex, minIndex), maxIndex);
+
+      setTaskList(arrayMove(taskList, oldIndex, newIndex));
     }
-
     setIsDragging(false);
   };
 
@@ -70,29 +82,26 @@ export default function ListSection() {
   };
 
   return (
-    <div>
-      <div className=''>
-        <div className='grid grid-cols-4 place-items-center'>
-          <div>Invoice</div>
-          <div>Status</div>
-          <div>Method</div>
-          <div className='text-right'>Amount</div>
-        </div>
-      </div>
-      <div className='mt-4 grid gap-2 overflow-hidden'>
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-          <SortableContext items={invoices.map((invoice) => invoice.invoice)}>
-            {invoices.map((invoice) => (
-              <SortbaleList
-                key={invoice.invoice}
-                data={invoice}
-                isDragging={isDragging}
-              />
+    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+      <SortableContext items={taskList.map((item) => item.id)}>
+        <Table className='overflow-hidden'>
+          <TableHeader className=''>
+            <TableRow>
+              {tableHeader.map((item, idx) => (
+                <TableHead key={idx} className='capitalize'>
+                  {item[Object.keys(item)[0]]}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody className='mt-4 divide-y border-b overflow-hidden'>
+            {taskList.map((item) => (
+              <SortbaleList key={item.id} data={item} isDragging={isDragging} />
             ))}
-          </SortableContext>
-        </DndContext>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </SortableContext>
+    </DndContext>
   );
 }
 
@@ -104,29 +113,33 @@ function SortbaleList({
   isDragging: boolean;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: data.invoice });
+    useSortable({ id: data.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString({
+      x: 0,
+      y: transform?.y ?? 0,
+      scaleX: transform?.scaleX ?? 1,
+      scaleY: transform?.scaleY ?? 1,
+    }),
     transition,
   };
 
   return (
-    <div
-      key={data?.invoice}
+    <TableRow
+      key={data?.id}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className={cn(
-        "grid grid-cols-4 place-items-center border rounded-md p-2",
-        isDragging ? "cursor-grabbing" : ""
-      )}
+      className={cn(isDragging ? "cursor-grabbing" : "")}
     >
-      <div className='font-medium'>{data?.invoice}</div>
-      <div className=''>{data?.paymentStatus}</div>
-      <div>{data?.paymentMethod}</div>
-      <div className='text-right'>{data?.totalAmount}</div>
-    </div>
+      <TableCell>{data?.name}</TableCell>
+      <TableCell>{data?.assigne} </TableCell>
+      <TableCell>{data?.dueDate}</TableCell>
+      <TableCell>{data?.priority}</TableCell>
+      <TableCell>{data.status}</TableCell>
+      <TableCell>{data?.comments}</TableCell>
+    </TableRow>
   );
 }
