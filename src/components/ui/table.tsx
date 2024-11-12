@@ -92,7 +92,11 @@ const TableCell = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    <div className={cn("w-[120px] xl:w-[80px]", className)}>
+      {props.children}
+    </div>
+  </td>
 ));
 TableCell.displayName = "TableCell";
 

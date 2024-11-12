@@ -13,6 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ComboBox } from "@/components/ui/comboBox";
+import { Flag, User } from "lucide-react";
 
 export default function ListSection() {
   const [isDragging, setIsDragging] = useState(false);
@@ -30,10 +32,10 @@ export default function ListSection() {
     {
       id: crypto.randomUUID(),
       name: "Task 2",
-      assigne: "Mary Doe",
+      assigne: "",
       dueDate: "2023-01-01",
-      priority: "Medium",
-      status: "In Progress",
+      priority: "",
+      status: "",
       comments: "",
     },
   ]);
@@ -88,7 +90,7 @@ export default function ListSection() {
           <TableHeader className=''>
             <TableRow>
               {tableHeader.map((item, idx) => (
-                <TableHead key={idx} className='capitalize'>
+                <TableHead key={idx} className='capitalize w-[200px]'>
                   {item[Object.keys(item)[0]]}
                 </TableHead>
               ))}
@@ -125,6 +127,8 @@ function SortbaleList({
     transition,
   };
 
+  const stopPropagation = (e: React.PointerEvent) => e.stopPropagation();
+
   return (
     <TableRow
       key={data?.id}
@@ -135,10 +139,46 @@ function SortbaleList({
       className={cn(isDragging ? "cursor-grabbing" : "")}
     >
       <TableCell>{data?.name}</TableCell>
-      <TableCell>{data?.assigne} </TableCell>
+      <TableCell className='w-[200px]'>
+        <div onPointerDown={stopPropagation}>
+          <ComboBox
+            options={[
+              { value: "John Doe", label: "John Doe" },
+              { value: "Jane Doe", label: "Jane Doe" },
+              { value: "Mary Doe", label: "Mary Doe" },
+            ]}
+            label={data.assigne && data.assigne}
+            icon={<User />}
+          />
+        </div>
+      </TableCell>
       <TableCell>{data?.dueDate}</TableCell>
-      <TableCell>{data?.priority}</TableCell>
-      <TableCell>{data.status}</TableCell>
+      <TableCell className='w-[200px]'>
+        <div onPointerDown={stopPropagation}>
+          <ComboBox
+            options={[
+              { value: "urgent", label: "Urgent" },
+              { value: "high", label: "High" },
+              { value: "normal", label: "Normal" },
+              { value: "low", label: "Low" },
+            ]}
+            label={data.priority ? data.priority : "Priority"}
+            icon={<Flag />}
+          />
+        </div>
+      </TableCell>
+      <TableCell className='w-[200px]'>
+        <div onPointerDown={stopPropagation}>
+          <ComboBox
+            options={[
+              { value: "1", label: "To Do" },
+              { value: "2", label: "In Progress" },
+              { value: "3", label: "Complete" },
+            ]}
+            label={data.status ? data.status : "To Do"}
+          />
+        </div>
+      </TableCell>
       <TableCell>{data?.comments}</TableCell>
     </TableRow>
   );
