@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { DndContext } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -39,6 +38,8 @@ export default function ListSection() {
       comments: "",
     },
   ]);
+
+  console.log({ taskList });
 
   const tableHeader = Object.keys(taskList[0])
     .filter((key) => key !== "id")
@@ -98,7 +99,12 @@ export default function ListSection() {
           </TableHeader>
           <TableBody className='mt-4 divide-y border-b overflow-hidden'>
             {taskList.map((item) => (
-              <SortbaleList key={item.id} data={item} isDragging={isDragging} />
+              <SortbaleList
+                key={item.id}
+                data={item}
+                isDragging={isDragging}
+                setTaskList={setTaskList}
+              />
             ))}
           </TableBody>
         </Table>
@@ -110,9 +116,11 @@ export default function ListSection() {
 function SortbaleList({
   data,
   isDragging,
+  setTaskList,
 }: {
   data: any;
   isDragging: boolean;
+  setTaskList: (list: any) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: data.id });
@@ -129,6 +137,55 @@ function SortbaleList({
 
   const stopPropagation = (e: React.PointerEvent) => e.stopPropagation();
 
+  const [status, setStatus] = useState<any>({
+    value: data.status,
+    label: data.status,
+  });
+  const [assigne, setAssigne] = useState<any>({
+    value: data.assigne,
+    label: data.assigne,
+  });
+  const [priority, setPriority] = useState<any>({
+    value: data.priority,
+    label: data.priority,
+  });
+
+  const handleStatusChange = (value: any) => {
+    setStatus(value);
+    setTaskList((prev: any) =>
+      prev.map((item: any) => {
+        if (item.id === data.id) {
+          return { ...item, status: value.value };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handlePriorityChange = (value: any) => {
+    setPriority(value);
+    setTaskList((prev: any) =>
+      prev.map((item: any) => {
+        if (item.id === data.id) {
+          return { ...item, priority: value.value };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleAssignChange = (value: any) => {
+    setAssigne(value);
+    setTaskList((prev: any) =>
+      prev.map((item: any) => {
+        if (item.id === data.id) {
+          return { ...item, assigne: value.value };
+        }
+        return item;
+      })
+    );
+  };
+
   return (
     <TableRow
       key={data?.id}
@@ -142,6 +199,8 @@ function SortbaleList({
       <TableCell className='w-[200px]'>
         <div onPointerDown={stopPropagation}>
           <ComboBox
+            onChange={(value) => handleAssignChange(value)}
+            value={assigne}
             options={[
               { value: "John Doe", label: "John Doe" },
               { value: "Jane Doe", label: "Jane Doe" },
@@ -156,6 +215,8 @@ function SortbaleList({
       <TableCell className='w-[200px]'>
         <div onPointerDown={stopPropagation}>
           <ComboBox
+            onChange={(value) => handlePriorityChange(value)}
+            value={priority}
             options={[
               { value: "urgent", label: "Urgent" },
               { value: "high", label: "High" },
@@ -170,10 +231,12 @@ function SortbaleList({
       <TableCell className='w-[200px]'>
         <div onPointerDown={stopPropagation}>
           <ComboBox
+            onChange={(value) => handleStatusChange(value)}
+            value={status}
             options={[
-              { value: "1", label: "To Do" },
-              { value: "2", label: "In Progress" },
-              { value: "3", label: "Complete" },
+              { value: "todo", label: "To Do" },
+              { value: "inprogress", label: "In Progress" },
+              { value: "complete", label: "Complete" },
             ]}
             label={data.status ? data.status : "To Do"}
           />

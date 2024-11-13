@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-type OptionProps = {
+export type OptionProps = {
   value: string;
   label: string;
 };
@@ -28,24 +28,26 @@ export function ComboBox({
   options,
   label,
   icon,
+  onChange,
+  value,
 }: {
   options: OptionProps[];
   label?: string;
   icon?: React.ReactNode;
+  onChange: (value: OptionProps | undefined) => void;
+  value: OptionProps;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [selectedStatus, setSelectedStatus] =
-    React.useState<OptionProps | null>(null);
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant='outline' className='w-[150px] justify-start'>
-            {selectedStatus ? (
+            {value?.value?.length ? (
               <>
-                {icon} {selectedStatus.label}
+                {icon} {value.label}
               </>
             ) : (
               <>
@@ -55,11 +57,7 @@ export function ComboBox({
           </Button>
         </PopoverTrigger>
         <PopoverContent className='w-[200px] p-0' align='start'>
-          <StatusList
-            setOpen={setOpen}
-            setSelectedStatus={setSelectedStatus}
-            options={options}
-          />
+          <StatusList setOpen={setOpen} onChange={onChange} options={options} />
         </PopoverContent>
       </Popover>
     );
@@ -69,9 +67,9 @@ export function ComboBox({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant='outline' className='w-[150px] justify-start'>
-          {selectedStatus ? (
+          {value ? (
             <>
-              {icon} {selectedStatus.label}
+              {icon} {value.label}
             </>
           ) : (
             <>
@@ -82,11 +80,7 @@ export function ComboBox({
       </DrawerTrigger>
       <DrawerContent>
         <div className='mt-4 border-t'>
-          <StatusList
-            setOpen={setOpen}
-            setSelectedStatus={setSelectedStatus}
-            options={options}
-          />
+          <StatusList setOpen={setOpen} onChange={onChange} options={options} />
         </div>
       </DrawerContent>
     </Drawer>
@@ -95,11 +89,11 @@ export function ComboBox({
 
 function StatusList({
   setOpen,
-  setSelectedStatus,
+  onChange,
   options,
 }: {
   setOpen: (open: boolean) => void;
-  setSelectedStatus: (status: OptionProps | null) => void;
+  onChange: (status: OptionProps | undefined) => void;
   options: OptionProps[];
 }) {
   return (
@@ -113,8 +107,8 @@ function StatusList({
               key={item.value}
               value={item.value}
               onSelect={(value) => {
-                setSelectedStatus(
-                  options.find((indvidual) => indvidual.value === value) || null
+                onChange(
+                  options.find((indvidual) => indvidual.value === value)
                 );
                 setOpen(false);
               }}
