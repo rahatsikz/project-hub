@@ -50,9 +50,9 @@ export function ComboBox({
                 {icon} {value.label}
               </>
             ) : (
-              <>
+              <span className='text-muted-foreground flex items-center gap-2'>
                 {icon} {label ? label : "Select"}
-              </>
+              </span>
             )}
           </Button>
         </PopoverTrigger>
@@ -67,14 +67,14 @@ export function ComboBox({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant='outline' className='w-[150px] justify-start'>
-          {value ? (
+          {value?.value?.length ? (
             <>
               {icon} {value.label}
             </>
           ) : (
-            <>
+            <span className='text-muted-foreground flex items-center gap-2'>
               {icon} {label ? label : "Select"}
-            </>
+            </span>
           )}
         </Button>
       </DrawerTrigger>

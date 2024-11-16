@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { ComboBox } from "@/components/ui/comboBox";
 import { Flag, User } from "lucide-react";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 export default function ListSection() {
   const [isDragging, setIsDragging] = useState(false);
@@ -23,7 +24,7 @@ export default function ListSection() {
       id: crypto.randomUUID(),
       name: "Task 1",
       assigne: "John Doe",
-      dueDate: "2023-01-01",
+      dueDate: "",
       priority: "Medium",
       status: "In Progress",
       comments: "",
@@ -88,7 +89,7 @@ export default function ListSection() {
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <SortableContext items={taskList.map((item) => item.id)}>
         <Table className='overflow-hidden'>
-          <TableHeader className=''>
+          <TableHeader>
             <TableRow>
               {tableHeader.map((item, idx) => (
                 <TableHead key={idx} className='capitalize w-[200px]'>
@@ -150,6 +151,20 @@ function SortbaleList({
     label: data.priority,
   });
 
+  const [date, setDate] = useState<Date>(data.dueDate);
+
+  const handleDateChange = (date: any) => {
+    setDate(date);
+    setTaskList((prev: any) =>
+      prev.map((item: any) => {
+        if (item.id === data.id) {
+          return { ...item, dueDate: date };
+        }
+        return item;
+      })
+    );
+  };
+
   const handleStatusChange = (value: any) => {
     setStatus(value);
     setTaskList((prev: any) =>
@@ -195,8 +210,8 @@ function SortbaleList({
       {...listeners}
       className={cn(isDragging ? "cursor-grabbing" : "")}
     >
-      <TableCell>{data?.name}</TableCell>
-      <TableCell className='w-[200px]'>
+      <TableCell className='min-w-20'>{data?.name}</TableCell>
+      <TableCell>
         <div onPointerDown={stopPropagation}>
           <ComboBox
             onChange={(value) => handleAssignChange(value)}
@@ -211,8 +226,12 @@ function SortbaleList({
           />
         </div>
       </TableCell>
-      <TableCell>{data?.dueDate}</TableCell>
-      <TableCell className='w-[200px]'>
+      <TableCell>
+        <div onPointerDown={stopPropagation}>
+          <DatePicker date={date} setDate={handleDateChange} />
+        </div>
+      </TableCell>
+      <TableCell>
         <div onPointerDown={stopPropagation}>
           <ComboBox
             onChange={(value) => handlePriorityChange(value)}
@@ -223,12 +242,11 @@ function SortbaleList({
               { value: "normal", label: "Normal" },
               { value: "low", label: "Low" },
             ]}
-            label={data.priority ? data.priority : "Priority"}
             icon={<Flag />}
           />
         </div>
       </TableCell>
-      <TableCell className='w-[200px]'>
+      <TableCell>
         <div onPointerDown={stopPropagation}>
           <ComboBox
             onChange={(value) => handleStatusChange(value)}
