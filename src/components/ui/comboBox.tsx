@@ -44,7 +44,7 @@ export function ComboBox({
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant='outline' className='w-[150px] justify-start'>
+          <Button variant='outline' className='w-full justify-start'>
             {value?.value?.length ? (
               <>
                 {icon} {value.label}
@@ -66,7 +66,7 @@ export function ComboBox({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant='outline' className='w-[150px] justify-start'>
+        <Button variant='outline' className='w-full justify-start'>
           {value?.value?.length ? (
             <>
               {icon} {value.label}

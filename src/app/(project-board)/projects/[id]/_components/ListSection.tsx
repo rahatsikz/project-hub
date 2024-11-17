@@ -13,41 +13,45 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ComboBox } from "@/components/ui/comboBox";
-import { Flag, User } from "lucide-react";
+import { AtSign, Flag, GripIcon, MessageCircle, User } from "lucide-react";
 import { DatePicker } from "@/components/ui/DatePicker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import { dummyAssigne, dummyTaskList } from "@/constant/global";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 export default function ListSection() {
   const [isDragging, setIsDragging] = useState(false);
 
-  const [taskList, setTaskList] = useState([
-    {
-      id: crypto.randomUUID(),
-      name: "Task 1",
-      assigne: "John Doe",
-      dueDate: "",
-      priority: "Medium",
-      status: "In Progress",
-      comments: "",
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Task 2",
-      assigne: "",
-      dueDate: "2023-01-01",
-      priority: "",
-      status: "",
-      comments: "",
-    },
-  ]);
+  const [taskList, setTaskList] = useState(dummyTaskList);
 
   console.log({ taskList });
 
   const tableHeader = Object.keys(taskList[0])
-    .filter((key) => key !== "id")
+    // .filter((key) => key !== "id")
     .map((key) => {
       if (key.includes("Date")) {
         return {
           [key]: "due date",
+        };
+      } else if (key.includes("id")) {
+        return {
+          [key]: "",
         };
       }
       return {
@@ -92,7 +96,13 @@ export default function ListSection() {
           <TableHeader>
             <TableRow>
               {tableHeader.map((item, idx) => (
-                <TableHead key={idx} className='capitalize w-[200px]'>
+                <TableHead
+                  key={idx}
+                  className={cn(
+                    item[Object.keys(item)[0]] === "" ? "w-12" : "",
+                    "capitalize"
+                  )}
+                >
                   {item[Object.keys(item)[0]]}
                 </TableHead>
               ))}
@@ -136,8 +146,6 @@ function SortbaleList({
     transition,
   };
 
-  const stopPropagation = (e: React.PointerEvent) => e.stopPropagation();
-
   const [status, setStatus] = useState<any>({
     value: data.status,
     label: data.status,
@@ -152,6 +160,13 @@ function SortbaleList({
   });
 
   const [date, setDate] = useState<Date>(data.dueDate);
+  // const [comments, setComments] = useState<any>([]);
+  const [commentMention, setCommentMention] = useState<any>([]);
+  // const [openMention, setOpenMention] = React.useState(false);
+  // const [openComment, setOpenComment] = React.useState(false);
+  useEffect(() => {
+    console.log({ commentMention });
+  }, [commentMention]);
 
   const handleDateChange = (date: any) => {
     setDate(date);
@@ -207,60 +222,176 @@ function SortbaleList({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
-      className={cn(isDragging ? "cursor-grabbing" : "")}
+      // {...listeners}
     >
+      <TableCell>
+        <div
+          {...listeners}
+          className={cn(isDragging ? "cursor-grabbing" : "cursor-grab")}
+        >
+          <GripIcon />
+        </div>
+      </TableCell>
       <TableCell className='min-w-20'>{data?.name}</TableCell>
       <TableCell>
-        <div onPointerDown={stopPropagation}>
-          <ComboBox
-            onChange={(value) => handleAssignChange(value)}
-            value={assigne}
-            options={[
-              { value: "John Doe", label: "John Doe" },
-              { value: "Jane Doe", label: "Jane Doe" },
-              { value: "Mary Doe", label: "Mary Doe" },
-            ]}
-            label={data.assigne && data.assigne}
-            icon={<User />}
-          />
-        </div>
+        <ComboBox
+          onChange={(value) => handleAssignChange(value)}
+          value={assigne}
+          options={[
+            { value: "John Doe", label: "John Doe" },
+            { value: "Jane Doe", label: "Jane Doe" },
+            { value: "Mary Doe", label: "Mary Doe" },
+          ]}
+          label={data.assigne && data.assigne}
+          icon={<User />}
+        />
       </TableCell>
       <TableCell>
-        <div onPointerDown={stopPropagation}>
-          <DatePicker date={date} setDate={handleDateChange} />
-        </div>
+        <DatePicker date={date} setDate={handleDateChange} />
       </TableCell>
       <TableCell>
-        <div onPointerDown={stopPropagation}>
-          <ComboBox
-            onChange={(value) => handlePriorityChange(value)}
-            value={priority}
-            options={[
-              { value: "urgent", label: "Urgent" },
-              { value: "high", label: "High" },
-              { value: "normal", label: "Normal" },
-              { value: "low", label: "Low" },
-            ]}
-            icon={<Flag />}
-          />
-        </div>
+        <ComboBox
+          onChange={(value) => handlePriorityChange(value)}
+          value={priority}
+          options={[
+            { value: "urgent", label: "Urgent" },
+            { value: "high", label: "High" },
+            { value: "normal", label: "Normal" },
+            { value: "low", label: "Low" },
+          ]}
+          icon={<Flag />}
+        />
       </TableCell>
       <TableCell>
-        <div onPointerDown={stopPropagation}>
-          <ComboBox
-            onChange={(value) => handleStatusChange(value)}
-            value={status}
-            options={[
-              { value: "todo", label: "To Do" },
-              { value: "inprogress", label: "In Progress" },
-              { value: "complete", label: "Complete" },
-            ]}
-            label={data.status ? data.status : "To Do"}
-          />
-        </div>
+        <ComboBox
+          onChange={(value) => handleStatusChange(value)}
+          value={status}
+          options={[
+            { value: "todo", label: "To Do" },
+            { value: "inprogress", label: "In Progress" },
+            { value: "complete", label: "Complete" },
+          ]}
+          label={data.status ? data.status : "To Do"}
+        />
       </TableCell>
-      <TableCell>{data?.comments}</TableCell>
+      <TableCell>
+        <Popover
+          modal={false}
+          // open={openComment}
+          // onOpenChange={setOpenComment}
+        >
+          <PopoverTrigger asChild>
+            <Button className='flex items-center gap-2' variant='ghost'>
+              <MessageCircle className='size-4 ml-1 text-muted-foreground' />
+              {data?.comments?.length ? data?.comments?.length : ""}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align='end' className='xl:w-96 p-2 rounded-lg'>
+            <div className='border border-foreground rounded-md divide-y'>
+              <Textarea
+                rows={3}
+                className='resize-none border-none focus-visible:ring-0'
+              />
+              <div className='flex justify-end px-2 py-2 items-center gap-1'>
+                <Popover
+                  modal={false}
+                  // open={openMention}
+                  // onOpenChange={setOpenMention}
+                >
+                  <PopoverTrigger asChild>
+                    <Button variant='ghost' className='flex items-center gap-2'>
+                      <AtSign className='size-4 mr-2 text-muted-foreground' />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align='end'
+                    className='xl:w-96 p-2 rounded-lg'
+                  >
+                    <Tabs defaultValue='people' className='popover-content'>
+                      <TabsList className='w-full justify-start gap-3 tabs-list'>
+                        <TabsTrigger value='people'>People</TabsTrigger>
+                        <TabsTrigger value='task'>Tasks</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value='people'>
+                        <Command>
+                          <CommandInput
+                            placeholder='Type to search...'
+                            className='h-8'
+                          />
+                          <CommandList>
+                            <CommandEmpty>No results found.</CommandEmpty>
+
+                            <CommandSeparator />
+                            <CommandGroup className='mt-2'>
+                              {dummyAssigne.map((item) => (
+                                <PopoverClose
+                                  key={item.value}
+                                  className='w-full flex flex-col'
+                                >
+                                  <CommandItem
+                                    className='w-full'
+                                    value={item.value}
+                                    onSelect={() => {
+                                      setCommentMention((prev: any) => [
+                                        ...prev,
+                                        {
+                                          label: item.label,
+                                          value: item.value,
+                                        },
+                                      ]);
+                                    }}
+                                  >
+                                    {item.label}
+                                  </CommandItem>
+                                </PopoverClose>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </TabsContent>
+                      <TabsContent value='task'>
+                        <Command>
+                          <CommandInput
+                            placeholder='Type to search...'
+                            className='h-8'
+                          />
+                          <CommandList>
+                            <CommandEmpty>No results found.</CommandEmpty>
+
+                            <CommandSeparator />
+                            <CommandGroup className='mt-2'>
+                              {dummyTaskList.map((item) => (
+                                <CommandItem
+                                  key={item.id}
+                                  value={item.id}
+                                  onSelect={() => {
+                                    setCommentMention((prev: any) => [
+                                      ...prev,
+                                      {
+                                        label: item.name,
+                                        value: item.id,
+                                      },
+                                    ]);
+                                  }}
+                                >
+                                  {item.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </TabsContent>
+                    </Tabs>
+                  </PopoverContent>
+                </Popover>
+                <Button className='h-7 rounded-sm' size={"sm"} type='submit'>
+                  Submit
+                </Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </TableCell>
     </TableRow>
   );
 }
