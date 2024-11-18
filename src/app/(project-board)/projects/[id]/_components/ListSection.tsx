@@ -160,12 +160,14 @@ function SortbaleList({
   });
 
   const [date, setDate] = useState<Date>(data.dueDate);
-  // const [comments, setComments] = useState<any>([]);
+  const [comment, setComment] = useState<any>();
   const [commentMention, setCommentMention] = useState<any>([]);
+  const [popoverOpen, setPopoverOpen] = useState(false);
   // const [openMention, setOpenMention] = React.useState(false);
   // const [openComment, setOpenComment] = React.useState(false);
   useEffect(() => {
     console.log({ commentMention });
+    // console.log(data.comments);
   }, [commentMention]);
 
   const handleDateChange = (date: any) => {
@@ -215,6 +217,18 @@ function SortbaleList({
       })
     );
   };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setComment(value);
+
+    // Open Popover if @ is typed
+    if (value.endsWith("@")) {
+      setPopoverOpen(true);
+    }
+  };
+
+  const togglePopover = () => setPopoverOpen((prev) => !prev);
 
   return (
     <TableRow
@@ -287,20 +301,41 @@ function SortbaleList({
             </Button>
           </PopoverTrigger>
           <PopoverContent align='end' className='xl:w-96 p-2 rounded-lg'>
+            <div>
+              {data?.comments?.map((item: any, index: number) => (
+                <div
+                  key={index}
+                  className='px-2 py-2 items-center gap-1 flex justify-between text-sm'
+                >
+                  <div className='flex items-center gap-2'>
+                    <User className='size-4 text-muted-foreground' />
+                    <span>{item.user}</span>
+                    <span>{item.comment}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className='border border-foreground rounded-md divide-y'>
               <Textarea
                 rows={3}
-                className='resize-none border-none focus-visible:ring-0'
+                className={cn("resize-none border-none focus-visible:ring-0")}
+                onChange={handleTextareaChange}
+                value={comment}
               />
+
               <div className='flex justify-end px-2 py-2 items-center gap-1'>
                 <Popover
                   modal={false}
-                  // open={openMention}
-                  // onOpenChange={setOpenMention}
+                  open={popoverOpen}
+                  onOpenChange={setPopoverOpen}
                 >
                   <PopoverTrigger asChild>
-                    <Button variant='ghost' className='flex items-center gap-2'>
-                      <AtSign className='size-4 mr-2 text-muted-foreground' />
+                    <Button
+                      variant='ghost'
+                      className='flex items-center gap-2'
+                      onClick={togglePopover}
+                    >
+                      <AtSign className='size-4 text-muted-foreground' />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
@@ -326,7 +361,7 @@ function SortbaleList({
                               {dummyAssigne.map((item) => (
                                 <PopoverClose
                                   key={item.value}
-                                  className='w-full flex flex-col'
+                                  className='flex flex-col w-full'
                                 >
                                   <CommandItem
                                     className='w-full'
@@ -339,6 +374,13 @@ function SortbaleList({
                                           value: item.value,
                                         },
                                       ]);
+                                      setComment((prev: any) => {
+                                        if (prev && prev.length) {
+                                          return `${prev} ${item.label}`;
+                                        }
+                                        return `${item.label}`;
+                                      });
+                                      setPopoverOpen(false);
                                     }}
                                   >
                                     {item.label}
@@ -361,21 +403,28 @@ function SortbaleList({
                             <CommandSeparator />
                             <CommandGroup className='mt-2'>
                               {dummyTaskList.map((item) => (
-                                <CommandItem
+                                <PopoverClose
                                   key={item.id}
-                                  value={item.id}
-                                  onSelect={() => {
-                                    setCommentMention((prev: any) => [
-                                      ...prev,
-                                      {
-                                        label: item.name,
-                                        value: item.id,
-                                      },
-                                    ]);
-                                  }}
+                                  className='w-full flex flex-col'
                                 >
-                                  {item.name}
-                                </CommandItem>
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id}
+                                    className='w-full'
+                                    onSelect={() => {
+                                      setCommentMention((prev: any) => [
+                                        ...prev,
+                                        {
+                                          label: item.name,
+                                          value: item.id,
+                                        },
+                                      ]);
+                                      setPopoverOpen(false);
+                                    }}
+                                  >
+                                    {item.name}
+                                  </CommandItem>
+                                </PopoverClose>
                               ))}
                             </CommandGroup>
                           </CommandList>

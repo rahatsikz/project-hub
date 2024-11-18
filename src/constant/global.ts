@@ -12,7 +12,12 @@ export const dummyTaskList = [
     dueDate: "",
     priority: "Medium",
     status: "In Progress",
-    comments: ["s"],
+    comments: [
+      {
+        comment: "This is a comment john",
+        user: "John Doe",
+      },
+    ],
   },
   {
     id: crypto.randomUUID(),
