@@ -14,7 +14,7 @@ export const dummyTaskList = [
     status: "In Progress",
     comments: [
       {
-        comment: "This is a comment john",
+        comment: "This is a comment @Mary Doe okay @Task 1",
         user: "John Doe",
       },
     ],
