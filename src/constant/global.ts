@@ -8,7 +8,7 @@ export const dummyTaskList = [
   {
     id: crypto.randomUUID(),
     name: "Task 1",
-    assigne: "John Doe",
+    assignee: "John Doe",
     dueDate: "",
     priority: "Medium",
     status: "In Progress",
@@ -22,8 +22,8 @@ export const dummyTaskList = [
   {
     id: crypto.randomUUID(),
     name: "Task 2",
-    assigne: "",
-    dueDate: "2023-01-01",
+    assignee: "",
+    dueDate: "Wed Nov 20 2024 21:28:40 GMT+0600 (Bangladesh Standard Time)",
     priority: "",
     status: "",
     comments: [],

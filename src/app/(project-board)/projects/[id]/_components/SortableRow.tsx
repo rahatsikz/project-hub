@@ -7,13 +7,16 @@ import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Flag, GripIcon, MessageCircle, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { CommentPopover } from "./CommentPopover";
 import {
   dummyAssigne,
   priorityOptions,
   statusOptions,
 } from "@/constant/global";
+import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import { formatISO } from "date-fns";
 
 export function SortbaleRow({
   data,
@@ -37,68 +40,62 @@ export function SortbaleRow({
     transition,
   };
 
-  const [status, setStatus] = useState<any>({
-    value: data.status,
-    label: data.status,
+  const form = useForm({
+    defaultValues: {
+      assignee: {
+        value: data.assignee,
+        label: data.assignee,
+      },
+      status: {
+        value: data.status,
+        label: data.status,
+      },
+      priority: {
+        value: data.priority,
+        label: data.priority,
+      },
+      dueDate: data.dueDate,
+    },
   });
-  const [assigne, setAssigne] = useState<any>({
-    value: data.assigne,
-    label: data.assigne,
-  });
-  const [priority, setPriority] = useState<any>({
-    value: data.priority,
-    label: data.priority,
-  });
 
-  const [date, setDate] = useState<Date>(data.dueDate);
+  const { watch } = form;
 
-  const handleDateChange = (date: any) => {
-    setDate(date);
-    setTaskList((prev: any) =>
-      prev.map((item: any) => {
-        if (item.id === data.id) {
-          return { ...item, dueDate: date };
-        }
-        return item;
-      })
-    );
-  };
+  // Watching for changes to the `assigne` field
+  const [assignee, status, priority, dueDate] = [
+    watch("assignee"),
+    watch("status"),
+    watch("priority"),
+    watch("dueDate"),
+  ];
+  useEffect(() => {
+    // Create a mapping of the watched fields to their corresponding keys in the task
+    const updates = {
+      assignee: assignee?.value,
+      status: status?.value,
+      priority: priority?.value,
+      dueDate: dueDate && formatISO(dueDate),
+    };
 
-  const handleStatusChange = (value: any) => {
-    setStatus(value);
-    setTaskList((prev: any) =>
-      prev.map((item: any) => {
-        if (item.id === data.id) {
-          return { ...item, status: value.value };
-        }
-        return item;
-      })
-    );
-  };
-
-  const handlePriorityChange = (value: any) => {
-    setPriority(value);
-    setTaskList((prev: any) =>
-      prev.map((item: any) => {
-        if (item.id === data.id) {
-          return { ...item, priority: value.value };
-        }
-        return item;
-      })
-    );
-  };
-
-  const handleAssignChange = (value: any) => {
-    setAssigne(value);
-    setTaskList((prev: any) =>
-      prev.map((item: any) => {
-        if (item.id === data.id) {
-          return { ...item, assigne: value.value };
-        }
-        return item;
-      })
-    );
-  };
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value !== undefined) {
+        setTaskList((prev: any) =>
+          prev.map((item: any) => {
+            if (item.id === data.id) {
+              return { ...item, [key]: value };
+            }
+            return item;
+          })
+        );
+      }
+    });
+  }, [
+    assignee?.value,
+    data.id,
+    priority?.value,
+    setTaskList,
+    status?.value,
+    dueDate,
+  ]);
 
   return (
     <TableRow key={data?.id} ref={setNodeRef} style={style} {...attributes}>
@@ -111,34 +108,42 @@ export function SortbaleRow({
         </div>
       </TableCell>
       <TableCell className='min-w-20'>{data?.name}</TableCell>
-      <TableCell>
-        <ComboBox
-          onChange={(value) => handleAssignChange(value)}
-          value={assigne}
-          options={dummyAssigne}
-          label={data.assigne && data.assigne}
-          icon={<User />}
-        />
-      </TableCell>
-      <TableCell>
-        <DatePicker date={date} setDate={handleDateChange} />
-      </TableCell>
-      <TableCell>
-        <ComboBox
-          onChange={(value) => handlePriorityChange(value)}
-          value={priority}
-          options={priorityOptions}
-          icon={<Flag />}
-        />
-      </TableCell>
-      <TableCell>
-        <ComboBox
-          onChange={(value) => handleStatusChange(value)}
-          value={status}
-          options={statusOptions}
-          label={data.status ? data.status : "To Do"}
-        />
-      </TableCell>
+      <Form {...form}>
+        <TableCell>
+          <form>
+            <ComboBox
+              formControl={form.control}
+              name='assignee'
+              options={dummyAssigne}
+              icon={<User />}
+            />
+          </form>
+        </TableCell>
+        <TableCell>
+          <form>
+            <DatePicker formController={form.control} name='dueDate' />
+          </form>
+        </TableCell>
+        <TableCell>
+          <form>
+            <ComboBox
+              formControl={form.control}
+              name='priority'
+              options={priorityOptions}
+              icon={<Flag />}
+            />
+          </form>
+        </TableCell>
+        <TableCell>
+          <form>
+            <ComboBox
+              formControl={form.control}
+              name='status'
+              options={statusOptions}
+            />
+          </form>
+        </TableCell>
+      </Form>
       <TableCell>
         <Popover modal={false}>
           <PopoverTrigger asChild>

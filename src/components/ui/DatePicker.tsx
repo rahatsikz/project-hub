@@ -3,7 +3,6 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,46 +11,66 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./form";
+import { Control } from "react-hook-form";
 
 type DatePickerProps = {
-  date: Date;
-  setDate: (date: Date | undefined | string) => void;
+  label?: string;
+  formController: Control<any>;
+  name: string;
 };
 
-export function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ label, formController, name }: DatePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const handleOutsideClick = () => {
-    setIsOpen(false);
-  };
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon className='mr-1 h-4 w-4' />
-          {date ? format(date, "MMM dd, yyyy") : <span>Pick a date</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className='w-auto p-0'
-        onInteractOutside={handleOutsideClick}
-      >
-        <Calendar
-          mode='single'
-          selected={date}
-          onSelect={(date) => {
-            setDate(date?.toISOString());
-            setIsOpen(false);
-          }}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
+    <FormField
+      control={formController}
+      name={name}
+      render={({ field }) => (
+        <FormItem className='flex flex-col'>
+          {label ? <FormLabel>{label}</FormLabel> : null}
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger asChild>
+              <FormControl>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className='mr-1 h-4 w-4' />
+                  {field.value ? (
+                    <span>{format(field.value, "MMM dd, yyyy")}</span>
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className='w-auto p-0'>
+              <Calendar
+                mode='single'
+                selected={field.value}
+                onSelect={(date) => {
+                  field.onChange(date);
+                  setIsOpen(false);
+                }}
+                disabled={(date) => date < new Date()}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

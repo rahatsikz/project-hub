@@ -11,13 +11,19 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./form";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 export type OptionProps = {
   value: string;
@@ -28,71 +34,57 @@ export function ComboBox({
   options,
   label,
   icon,
-  onChange,
-  value,
+  name,
+  formControl,
 }: {
   options: OptionProps[];
   label?: string;
   icon?: React.ReactNode;
-  onChange: (value: OptionProps | undefined) => void;
-  value: OptionProps;
+  name: string;
+  formControl: any;
+  onChange?: (option: OptionProps | undefined) => void;
 }) {
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button variant='outline' className='w-full justify-start'>
-            {value?.value?.length ? (
-              <>
-                {icon} {value.label}
-              </>
-            ) : (
-              <span className='text-muted-foreground flex items-center gap-2'>
-                {icon} {label ? label : "Select"}
-              </span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className='w-[200px] p-0' align='start'>
-          <StatusList setOpen={setOpen} onChange={onChange} options={options} />
-        </PopoverContent>
-      </Popover>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant='outline' className='w-full justify-start'>
-          {value?.value?.length ? (
-            <>
-              {icon} {value.label}
-            </>
-          ) : (
-            <span className='text-muted-foreground flex items-center gap-2'>
-              {icon} {label ? label : "Select"}
-            </span>
-          )}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className='mt-4 border-t'>
-          <StatusList setOpen={setOpen} onChange={onChange} options={options} />
-        </div>
-      </DrawerContent>
-    </Drawer>
+    <FormField
+      control={formControl}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          {label ? <FormLabel>{label}</FormLabel> : null}
+          <FormControl>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant='outline' className='w-full justify-start'>
+                  {field.value?.label ? (
+                    <>
+                      {icon} {field.value?.label}
+                    </>
+                  ) : (
+                    <span className='text-muted-foreground flex items-center gap-2'>
+                      {icon} {label ? label : "Select"}
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-[200px] p-0' align='start'>
+                <OptionList
+                  onChange={(selectedOption) => field.onChange(selectedOption)}
+                  options={options}
+                />
+              </PopoverContent>
+            </Popover>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
 
-function StatusList({
-  setOpen,
+function OptionList({
   onChange,
   options,
 }: {
-  setOpen: (open: boolean) => void;
   onChange: (status: OptionProps | undefined) => void;
   options: OptionProps[];
 }) {
@@ -103,18 +95,23 @@ function StatusList({
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
           {options.map((item) => (
-            <CommandItem
+            <PopoverClose
               key={item.value}
-              value={item.value}
-              onSelect={(value) => {
-                onChange(
-                  options.find((indvidual) => indvidual.value === value)
-                );
-                setOpen(false);
-              }}
+              className='flex flex-col gap-4 w-full'
             >
-              {item.label}
-            </CommandItem>
+              <CommandItem
+                className='w-full'
+                value={item.value}
+                onSelect={(value) => {
+                  onChange(
+                    options.find((indvidual) => indvidual.value === value)
+                  );
+                  console.log(value);
+                }}
+              >
+                {item.label}
+              </CommandItem>
+            </PopoverClose>
           ))}
         </CommandGroup>
       </CommandList>

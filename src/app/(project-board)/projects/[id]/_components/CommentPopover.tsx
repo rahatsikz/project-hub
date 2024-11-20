@@ -8,13 +8,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
@@ -111,6 +105,10 @@ export function CommentPopover({ commnetsData, setTaskList, id }: any) {
     },
   });
 
+  const { watch, setValue } = form;
+
+  const commentData = watch("comment");
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -165,143 +163,127 @@ export function CommentPopover({ commnetsData, setTaskList, id }: any) {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name='comment'
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className='border border-input rounded-md divide-y'>
-                    <Textarea
-                      rows={3}
-                      className={cn(
-                        "resize-none border-none focus-visible:ring-0"
-                      )}
-                      {...field}
-                      ref={textareaRef}
-                      onKeyDown={(e) => {
-                        if (e.key === "@") {
-                          togglePopover();
-                        }
-                      }}
-                    />
+          <div className='border border-input rounded-md divide-y'>
+            <Textarea
+              formControl={form.control}
+              rows={3}
+              name='comment'
+              className={cn("resize-none border-none focus-visible:ring-0")}
+              ref={textareaRef}
+              onKeyDown={(e) => {
+                if (e.key === "@") {
+                  togglePopover();
+                }
+              }}
+            />
 
-                    <div className='flex justify-end px-2 py-2 items-center gap-1'>
-                      <Popover
-                        modal={false}
-                        open={popoverOpen}
-                        onOpenChange={handlePopoverClose}
-                      >
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant='ghost'
-                            className='h-7 rounded-sm'
-                            onClick={togglePopover}
-                          >
-                            <AtSign className='size-4 text-muted-foreground' />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          align='end'
-                          className='xl:w-96 p-2 rounded-lg font-sans'
-                        >
-                          <Tabs
-                            defaultValue='people'
-                            className='popover-content'
-                          >
-                            <TabsList className='w-full justify-start gap-3 tabs-list'>
-                              <TabsTrigger value='people'>People</TabsTrigger>
-                              <TabsTrigger value='task'>Tasks</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value='people'>
-                              <Command>
-                                <CommandInput
-                                  placeholder='Type to search...'
-                                  className='h-8'
-                                />
-                                <CommandList>
-                                  <CommandEmpty>No results found.</CommandEmpty>
+            <div className='flex justify-end px-2 py-2 items-center gap-1'>
+              <Popover
+                modal={false}
+                open={popoverOpen}
+                onOpenChange={handlePopoverClose}
+              >
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    className='h-7 rounded-sm'
+                    onClick={togglePopover}
+                  >
+                    <AtSign className='size-4 text-muted-foreground' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align='end'
+                  className='xl:w-96 p-2 rounded-lg font-sans'
+                >
+                  <Tabs defaultValue='people' className='popover-content'>
+                    <TabsList className='w-full justify-start gap-3 tabs-list'>
+                      <TabsTrigger value='people'>People</TabsTrigger>
+                      <TabsTrigger value='task'>Tasks</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='people'>
+                      <Command>
+                        <CommandInput
+                          placeholder='Type to search...'
+                          className='h-8'
+                        />
+                        <CommandList>
+                          <CommandEmpty>No results found.</CommandEmpty>
 
-                                  <CommandSeparator />
-                                  <CommandGroup className='mt-2'>
-                                    {dummyAssigne.map((item) => (
-                                      <PopoverClose
-                                        key={item.value}
-                                        className='flex flex-col w-full'
-                                      >
-                                        <CommandItem
-                                          className='w-full'
-                                          value={item.value}
-                                          onSelect={() => {
-                                            const updatedValue = field.value
-                                              ? `${field.value} @${item.label}`
-                                              : `@${item.label}`;
-                                            field.onChange(updatedValue); // Directly pass the updated value
-                                            setPopoverOpen(false);
-                                          }}
-                                        >
-                                          {item.label}
-                                        </CommandItem>
-                                      </PopoverClose>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </TabsContent>
-                            <TabsContent value='task'>
-                              <Command>
-                                <CommandInput
-                                  placeholder='Type to search...'
-                                  className='h-8'
-                                />
-                                <CommandList>
-                                  <CommandEmpty>No results found.</CommandEmpty>
+                          <CommandSeparator />
+                          <CommandGroup className='mt-2'>
+                            {dummyAssigne.map((item) => (
+                              <PopoverClose
+                                key={item.value}
+                                className='flex flex-col w-full'
+                              >
+                                <CommandItem
+                                  className='w-full'
+                                  value={item.value}
+                                  onSelect={() => {
+                                    const updatedValue = commentData
+                                      ? `${commentData} @${item.label}`
+                                      : `@${item.label}`;
+                                    setValue("comment", updatedValue, {
+                                      shouldValidate: true,
+                                    });
+                                    setPopoverOpen(false);
+                                  }}
+                                >
+                                  {item.label}
+                                </CommandItem>
+                              </PopoverClose>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </TabsContent>
+                    <TabsContent value='task'>
+                      <Command>
+                        <CommandInput
+                          placeholder='Type to search...'
+                          className='h-8'
+                        />
+                        <CommandList>
+                          <CommandEmpty>No results found.</CommandEmpty>
 
-                                  <CommandSeparator />
-                                  <CommandGroup className='mt-2'>
-                                    {dummyTaskList.map((item) => (
-                                      <PopoverClose
-                                        key={item.id}
-                                        className='w-full flex flex-col'
-                                      >
-                                        <CommandItem
-                                          key={item.id}
-                                          value={item.id}
-                                          className='w-full'
-                                          onSelect={() => {
-                                            const updatedValue = field.value
-                                              ? `${field.value} @${item.name}`
-                                              : `@${item.name}`;
-                                            field.onChange(updatedValue); // Directly pass the updated value
-                                            setPopoverOpen(false);
-                                          }}
-                                        >
-                                          {item.name}
-                                        </CommandItem>
-                                      </PopoverClose>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </TabsContent>
-                          </Tabs>
-                        </PopoverContent>
-                      </Popover>
-                      <Button
-                        className='h-7 rounded-sm'
-                        size={"sm"}
-                        type='submit'
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                          <CommandSeparator />
+                          <CommandGroup className='mt-2'>
+                            {dummyTaskList.map((item) => (
+                              <PopoverClose
+                                key={item.id}
+                                className='w-full flex flex-col'
+                              >
+                                <CommandItem
+                                  key={item.id}
+                                  value={item.id}
+                                  className='w-full'
+                                  onSelect={() => {
+                                    const updatedValue = commentData
+                                      ? `${commentData} @${item.name}`
+                                      : `@${item.name}`;
+                                    setValue("comment", updatedValue, {
+                                      shouldValidate: true,
+                                    });
+                                    setPopoverOpen(false);
+                                  }}
+                                >
+                                  {item.name}
+                                </CommandItem>
+                              </PopoverClose>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </TabsContent>
+                  </Tabs>
+                </PopoverContent>
+              </Popover>
+              <Button className='h-7 rounded-sm' size={"sm"} type='submit'>
+                Submit
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </PopoverContent>
