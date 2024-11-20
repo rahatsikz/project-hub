@@ -29,3 +29,16 @@ export const dummyTaskList = [
     comments: [],
   },
 ];
+
+export const priorityOptions = [
+  { value: "urgent", label: "Urgent" },
+  { value: "high", label: "High" },
+  { value: "normal", label: "Normal" },
+  { value: "low", label: "Low" },
+];
+
+export const statusOptions = [
+  { value: "todo", label: "To Do" },
+  { value: "inprogress", label: "In Progress" },
+  { value: "complete", label: "Complete" },
+];
