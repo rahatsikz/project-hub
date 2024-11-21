@@ -58,6 +58,7 @@ export function DatePicker({ label, formController, name }: DatePickerProps) {
             <PopoverContent className='w-auto p-0'>
               <Calendar
                 mode='single'
+                defaultMonth={field.value}
                 selected={field.value}
                 onSelect={(date) => {
                   field.onChange(date);

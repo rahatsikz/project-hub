@@ -25,7 +25,12 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export function CommentPopover({ commnetsData, setTaskList, id }: any) {
+export function CommentPopover({
+  commnetsData,
+  setTaskList,
+  id,
+  isSubtask = false,
+}: any) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -115,16 +120,34 @@ export function CommentPopover({ commnetsData, setTaskList, id }: any) {
 
     setTaskList((prev: any) => {
       return prev.map((item: any) => {
-        if (item.id === id) {
+        if (!isSubtask) {
+          if (item.id === id) {
+            return {
+              ...item,
+              comments: [
+                ...item.comments,
+                { comment: values.comment, user: "John Doe" },
+              ],
+            };
+          }
+          return item;
+        } else {
           return {
             ...item,
-            comments: [
-              ...item.comments,
-              { comment: values.comment, user: "John Doe" },
-            ],
+            subTasks: item.subTasks.map((subTask: any) => {
+              if (subTask.id === id) {
+                return {
+                  ...subTask,
+                  comments: [
+                    ...subTask.comments,
+                    { comment: values.comment, user: "John Doe" },
+                  ],
+                };
+              }
+              return subTask;
+            }),
           };
         }
-        return item;
       });
     });
 

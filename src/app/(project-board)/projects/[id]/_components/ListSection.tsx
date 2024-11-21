@@ -21,7 +21,7 @@ export default function ListSection() {
   console.log({ taskList });
 
   const tableHeader = Object.keys(taskList[0])
-    // .filter((key) => key !== "id")
+    .filter((key) => key !== "subTasks")
     .map((key) => {
       if (key.includes("Date")) {
         return {

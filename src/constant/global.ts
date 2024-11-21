@@ -18,15 +18,41 @@ export const dummyTaskList = [
         user: "John Doe",
       },
     ],
+    subTasks: [
+      {
+        id: crypto.randomUUID(),
+        name: "Subtask 1",
+        assignee: "John Doe",
+        dueDate: "",
+        priority: "Medium",
+        status: "To Do",
+        comments: [
+          {
+            comment: "Sub comment @Mary Doe okay @Task 1",
+            user: "John Doe",
+          },
+        ],
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Subtask 2",
+        assignee: "Jane Doe",
+        dueDate: "",
+        priority: "High",
+        status: "To Do",
+        comments: [],
+      },
+    ],
   },
   {
     id: crypto.randomUUID(),
     name: "Task 2",
     assignee: "",
-    dueDate: "Wed Nov 20 2024 21:28:40 GMT+0600 (Bangladesh Standard Time)",
+    dueDate: new Date(),
     priority: "",
     status: "",
     comments: [],
+    subTasks: [],
   },
 ];
 
