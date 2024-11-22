@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ComboBox } from "@/components/ui/comboBox";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -23,6 +22,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { formatISO } from "date-fns";
+import { ComboBox } from "@/components/ui/ComboBox";
 
 export function SortbaleRow({
   data,
@@ -58,12 +58,14 @@ export function SortbaleRow({
         label: data.assignee,
       },
       status: {
-        value: data.status || statusOptions[0].value,
-        label: data.status || statusOptions[0].label,
+        value: data.status.value || statusOptions[0].value,
+        label: data.status.label || statusOptions[0].label,
+        icon: data.status.icon || statusOptions[0].icon,
       },
       priority: {
-        value: data.priority,
-        label: data.priority,
+        value: data.priority.value,
+        label: data.priority.label,
+        icon: data.priority.icon,
       },
       dueDate: data.dueDate,
     },
@@ -156,6 +158,7 @@ export function SortbaleRow({
                 name='assignee'
                 options={dummyAssigne}
                 icon={<User />}
+                className='w-28 truncate'
               />
             </form>
           </TableCell>
@@ -171,6 +174,7 @@ export function SortbaleRow({
                 name='priority'
                 options={priorityOptions}
                 icon={<Flag />}
+                className={cn("w-28 truncate")}
               />
             </form>
           </TableCell>
@@ -180,6 +184,8 @@ export function SortbaleRow({
                 formControl={form.control}
                 name='status'
                 options={statusOptions}
+                className={cn("truncate w-32")}
+                // style={{ color: status?.color }}
               />
             </form>
           </TableCell>
@@ -187,7 +193,10 @@ export function SortbaleRow({
         <TableCell>
           <Popover modal={false}>
             <PopoverTrigger asChild>
-              <Button className='flex items-center gap-2' variant='ghost'>
+              <Button
+                className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-16'
+                variant='ghost'
+              >
                 <MessageCircle className='size-4 ml-1 text-muted-foreground' />
                 {data?.comments?.length ? data?.comments?.length : ""}
               </Button>
@@ -233,12 +242,14 @@ function SubtaskRow({
         label: data.assignee,
       },
       status: {
-        value: data.status || statusOptions[0].value,
-        label: data.status || statusOptions[0].label,
+        value: data.status.value || statusOptions[0].value,
+        label: data.status.label || statusOptions[0].label,
+        icon: data.status.icon || statusOptions[0].icon,
       },
       priority: {
-        value: data.priority,
-        label: data.priority,
+        value: data.priority.value,
+        label: data.priority.label,
+        icon: data.priority.icon,
       },
       dueDate: data.dueDate,
     },
@@ -320,6 +331,7 @@ function SubtaskRow({
               name='priority'
               options={priorityOptions}
               icon={<Flag />}
+              className={cn("w-28 truncate")}
             />
           </form>
         </TableCell>
@@ -329,6 +341,7 @@ function SubtaskRow({
               formControl={form.control}
               name='status'
               options={statusOptions}
+              className={cn("w-32 truncate")}
             />
           </form>
         </TableCell>
@@ -336,7 +349,10 @@ function SubtaskRow({
       <TableCell>
         <Popover modal={false}>
           <PopoverTrigger asChild>
-            <Button className='flex items-center gap-2' variant='ghost'>
+            <Button
+              className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-14'
+              variant='ghost'
+            >
               <MessageCircle className='size-4 ml-1 text-muted-foreground' />
               {data?.comments?.length ? data?.comments?.length : ""}
             </Button>

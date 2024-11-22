@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -24,10 +23,13 @@ import {
   FormMessage,
 } from "./form";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { cn } from "@/lib/utils";
+import { Button } from "./button";
 
 export type OptionProps = {
   value: string;
   label: string;
+  icon?: React.ReactNode;
 };
 
 export function ComboBox({
@@ -36,6 +38,7 @@ export function ComboBox({
   icon,
   name,
   formControl,
+  ...props
 }: {
   options: OptionProps[];
   label?: string;
@@ -43,7 +46,7 @@ export function ComboBox({
   name: string;
   formControl: any;
   onChange?: (option: OptionProps | undefined) => void;
-}) {
+} & React.HTMLAttributes<HTMLButtonElement>) {
   return (
     <FormField
       control={formControl}
@@ -54,15 +57,21 @@ export function ComboBox({
           <FormControl>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant='outline' className='w-full justify-start'>
+                <Button
+                  variant='outline'
+                  className={cn(
+                    "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background",
+                    props.className
+                  )}
+                  style={props.style}
+                >
                   {field.value?.label ? (
-                    <>
-                      {icon} {field.value?.label}
-                    </>
+                    <div className='flex items-center gap-2 '>
+                      {field.value?.icon}
+                      <span className='truncate'>{field.value?.label}</span>
+                    </div>
                   ) : (
-                    <span className='text-muted-foreground flex items-center gap-2'>
-                      {icon} {label ? label : "Select"}
-                    </span>
+                    <span className='text-muted-foreground'>{icon}</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -109,7 +118,7 @@ function OptionList({
                   console.log(value);
                 }}
               >
-                {item.label}
+                {item.icon} {item.label}
               </CommandItem>
             </PopoverClose>
           ))}

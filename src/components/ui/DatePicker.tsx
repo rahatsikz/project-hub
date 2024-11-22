@@ -42,7 +42,7 @@ export function DatePicker({ label, formController, name }: DatePickerProps) {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background max-w-36",
                     !field.value && "text-muted-foreground"
                   )}
                 >

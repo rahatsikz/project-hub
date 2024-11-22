@@ -77,8 +77,8 @@ export default function ListSection() {
                 <TableHead
                   key={idx}
                   className={cn(
-                    item[Object.keys(item)[0]] === "" ? "w-12" : "",
-                    "capitalize"
+                    item[Object.keys(item)[0]] === "" ? "w-12 pl-2" : "pl-7",
+                    "capitalize "
                   )}
                 >
                   {item[Object.keys(item)[0]]}
