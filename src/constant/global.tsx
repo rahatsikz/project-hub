@@ -6,9 +6,9 @@ import {
 } from "lucide-react";
 
 export const dummyAssigne = [
-  { value: "John Doe", label: "John Doe" },
-  { value: "Jane Doe", label: "Jane Doe" },
-  { value: "Mary Doe", label: "Mary Doe" },
+  { value: "John Doe", label: "John Doe", acronym: "JD", id: 1 },
+  { value: "Jane Doe", label: "Jane Doe", acronym: "JA", id: 2 },
+  { value: "Mary Doe", label: "Mary Doe", acronym: "MD", id: 3 },
 ];
 
 export const priorityOptions = [
@@ -60,7 +60,7 @@ export const dummyTaskList = [
   {
     id: crypto.randomUUID(),
     name: "Task 1",
-    assignee: "John Doe",
+    assignee: dummyAssigne[0],
     dueDate: "",
     priority: priorityOptions[1],
     status: statusOptions[1],
@@ -74,7 +74,7 @@ export const dummyTaskList = [
       {
         id: crypto.randomUUID(),
         name: "Subtask 1",
-        assignee: "John Doe",
+        assignee: dummyAssigne[2],
         dueDate: "",
         priority: priorityOptions[0],
         status: statusOptions[1],
@@ -88,7 +88,7 @@ export const dummyTaskList = [
       {
         id: crypto.randomUUID(),
         name: "Subtask 2",
-        assignee: "Jane Doe",
+        assignee: dummyAssigne[0],
         dueDate: "",
         priority: priorityOptions[3],
         status: statusOptions[0],
@@ -99,7 +99,7 @@ export const dummyTaskList = [
   {
     id: crypto.randomUUID(),
     name: "Task 2",
-    assignee: "",
+    assignee: [],
     dueDate: new Date(),
     priority: "",
     status: "",

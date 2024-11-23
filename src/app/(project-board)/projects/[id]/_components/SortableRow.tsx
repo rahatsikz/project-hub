@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { formatISO } from "date-fns";
 import { ComboBox } from "@/components/ui/ComboBox";
+import { MultiSelect } from "@/components/ui/MultiSelect";
 
 export function SortbaleRow({
   data,
@@ -53,10 +54,14 @@ export function SortbaleRow({
 
   const form = useForm({
     defaultValues: {
-      assignee: {
-        value: data.assignee,
-        label: data.assignee,
-      },
+      assignee: [
+        {
+          value: data.assignee.value,
+          label: data.assignee.label,
+          acronym: data.assignee.acronym,
+          id: data.assignee.id,
+        },
+      ],
       status: {
         value: data.status.value || statusOptions[0].value,
         label: data.status.label || statusOptions[0].label,
@@ -83,7 +88,7 @@ export function SortbaleRow({
   useEffect(() => {
     // Create a mapping of the watched fields to their corresponding keys in the task
     const updates = {
-      assignee: assignee?.value,
+      assignee: assignee,
       status: status?.value,
       priority: priority?.value,
       dueDate: dueDate && formatISO(dueDate),
@@ -101,14 +106,7 @@ export function SortbaleRow({
         );
       }
     });
-  }, [
-    assignee?.value,
-    data.id,
-    priority?.value,
-    setTaskList,
-    status?.value,
-    dueDate,
-  ]);
+  }, [assignee, data.id, priority?.value, setTaskList, status?.value, dueDate]);
 
   useEffect(() => {
     if (subTasksOpen.open && isDragging) {
@@ -153,12 +151,12 @@ export function SortbaleRow({
         <Form {...form}>
           <TableCell>
             <form>
-              <ComboBox
+              <MultiSelect
                 formControl={form.control}
                 name='assignee'
                 options={dummyAssigne}
                 icon={<User />}
-                className='w-28 truncate'
+                className='min-w-36 max-w-48 truncate'
               />
             </form>
           </TableCell>
@@ -237,10 +235,14 @@ function SubtaskRow({
 }) {
   const form = useForm({
     defaultValues: {
-      assignee: {
-        value: data.assignee,
-        label: data.assignee,
-      },
+      assignee: [
+        {
+          value: data.assignee.value,
+          label: data.assignee.label,
+          acronym: data.assignee.acronym,
+          id: data.assignee.id,
+        },
+      ],
       status: {
         value: data.status.value || statusOptions[0].value,
         label: data.status.label || statusOptions[0].label,
@@ -267,7 +269,7 @@ function SubtaskRow({
   useEffect(() => {
     // Create a mapping of the watched fields to their corresponding keys in the task
     const updates = {
-      assignee: assignee?.value,
+      assignee: assignee,
       status: status?.value,
       priority: priority?.value,
       dueDate: dueDate && formatISO(dueDate),
@@ -294,7 +296,7 @@ function SubtaskRow({
       }
     });
   }, [
-    assignee?.value,
+    assignee,
     mainRowId,
     priority?.value,
     setTaskList,
@@ -311,11 +313,12 @@ function SubtaskRow({
       <Form {...form}>
         <TableCell>
           <form>
-            <ComboBox
+            <MultiSelect
               formControl={form.control}
               name='assignee'
               options={dummyAssigne}
               icon={<User />}
+              className='min-w-36 max-w-48 truncate'
             />
           </form>
         </TableCell>

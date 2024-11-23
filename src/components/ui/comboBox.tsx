@@ -109,7 +109,7 @@ function OptionList({
               className='flex flex-col gap-4 w-full'
             >
               <CommandItem
-                className='w-full'
+                className='w-full cursor-pointer'
                 value={item.value}
                 onSelect={(value) => {
                   onChange(
