@@ -126,7 +126,13 @@ export function SortbaleRow({
 
   return (
     <>
-      <TableRow key={data?.id} ref={setNodeRef} style={style} {...attributes}>
+      <TableRow
+        key={data?.id}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className='group'
+      >
         <TableCell>
           <div
             {...listeners}
@@ -162,7 +168,7 @@ export function SortbaleRow({
                   : "flex items-center justify-between w-full"
               )}
             >
-              <p className='xl:w-60 line-clamp-1'>{data?.name}</p>
+              <p className='xl:w-60 w-32 line-clamp-1'>{data?.name}</p>
               <Button
                 size={"icon"}
                 variant={"ghost"}
@@ -172,6 +178,10 @@ export function SortbaleRow({
                     inputRef.current.focus();
                   }
                 }}
+                className={cn(
+                  "opacity-0  transition-opacity duration-300 ease-in-out",
+                  isDragging ? "" : "group-hover:opacity-100"
+                )}
               >
                 <Edit />
               </Button>
@@ -188,7 +198,7 @@ export function SortbaleRow({
                 ref={inputRef}
                 type='text'
                 defaultValue={data?.name}
-                className='xl:w-52 border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                className='xl:w-52 w-24 border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                 onBlur={() => setIsNameEditing(false)}
               />
               <Button
