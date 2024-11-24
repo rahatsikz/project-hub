@@ -6,13 +6,15 @@ import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  Check,
   ChevronRight,
+  Edit,
   Flag,
   GripIcon,
   MessageCircle,
   User,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CommentPopover } from "./CommentPopover";
 import {
   dummyAssigne,
@@ -24,6 +26,7 @@ import { Form } from "@/components/ui/form";
 import { formatISO } from "date-fns";
 import { ComboBox } from "@/components/ui/ComboBox";
 import { MultiSelect } from "@/components/ui/MultiSelect";
+import { Input } from "@/components/ui/input";
 
 export function SortbaleRow({
   data,
@@ -62,17 +65,7 @@ export function SortbaleRow({
           id: data.assignee.id,
         },
       ],
-      // status: {
-      //   value: data.status.value || statusOptions[0].value,
-      //   label: data.status.label || statusOptions[0].label,
-      //   icon: data.status.icon || statusOptions[0].icon,
-      // },
-      // priority: {
-      //   value: data.priority.value,
-      //   label: data.priority.label,
-      //   icon: data.priority.icon,
-      // },
-      status: data.status,
+      status: data.status || statusOptions[0].value,
       priority: data.priority,
       dueDate: data.dueDate,
     },
@@ -119,6 +112,16 @@ export function SortbaleRow({
     }
   }, [data.id, isDragging, subTasksOpen.open]);
 
+  // to edit the task name
+  const [isNameEditing, setIsNameEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isNameEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isNameEditing]);
+
   console.log({ data });
 
   return (
@@ -132,7 +135,7 @@ export function SortbaleRow({
             <GripIcon className='size-4' />
           </div>
         </TableCell>
-        <TableCell className='flex items-center gap-2'>
+        <TableCell className='flex items-center gap-2 w-full '>
           <Button
             variant='ghost'
             size='sm'
@@ -150,7 +153,54 @@ export function SortbaleRow({
               )}
             />
           </Button>
-          <div className='min-w-20 max-w-32 truncate'>{data?.name}</div>
+          {/* <div className='min-w-20 max-w-32 truncate'>{data?.name}</div> */}
+          <div className=' flex items-center w-full justify-between'>
+            <div
+              className={cn(
+                isNameEditing
+                  ? "hidden"
+                  : "flex items-center justify-between w-full"
+              )}
+            >
+              <p className='xl:w-60 line-clamp-1'>{data?.name}</p>
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                onClick={() => {
+                  setIsNameEditing(true);
+                  if (inputRef.current) {
+                    inputRef.current.focus();
+                  }
+                }}
+              >
+                <Edit />
+              </Button>
+            </div>
+            <div
+              className={cn(
+                isNameEditing
+                  ? "flex justify-between items-center gap-4 w-full"
+                  : "hidden",
+                ""
+              )}
+            >
+              <Input
+                ref={inputRef}
+                type='text'
+                defaultValue={data?.name}
+                className='xl:w-52 border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                onBlur={() => setIsNameEditing(false)}
+              />
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                type='submit'
+                className=''
+              >
+                <Check />
+              </Button>
+            </div>
+          </div>
         </TableCell>
         <Form {...form}>
           <TableCell>
@@ -247,7 +297,7 @@ function SubtaskRow({
           id: data.assignee.id,
         },
       ],
-      status: data.status,
+      status: data.status || statusOptions[0].value,
       priority: data.priority,
       dueDate: data.dueDate,
     },
