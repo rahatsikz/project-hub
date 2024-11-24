@@ -62,8 +62,8 @@ export const dummyTaskList = [
     name: "Task 1",
     assignee: dummyAssigne[0],
     dueDate: "",
-    priority: priorityOptions[1],
-    status: statusOptions[1],
+    priority: priorityOptions[1].value,
+    status: statusOptions[1].value,
     comments: [
       {
         comment: "This is a comment @Mary Doe okay @Task 1",
@@ -76,8 +76,8 @@ export const dummyTaskList = [
         name: "Subtask 1",
         assignee: dummyAssigne[2],
         dueDate: "",
-        priority: priorityOptions[0],
-        status: statusOptions[1],
+        priority: priorityOptions[0].value,
+        status: statusOptions[1].value,
         comments: [
           {
             comment: "Sub comment @Mary Doe okay @Task 1",
@@ -90,8 +90,8 @@ export const dummyTaskList = [
         name: "Subtask 2",
         assignee: dummyAssigne[0],
         dueDate: "",
-        priority: priorityOptions[3],
-        status: statusOptions[0],
+        priority: priorityOptions[3].value,
+        status: statusOptions[0].value,
         comments: [],
       },
     ],

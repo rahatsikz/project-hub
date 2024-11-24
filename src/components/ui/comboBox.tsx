@@ -45,7 +45,7 @@ export function ComboBox({
   icon?: React.ReactNode;
   name: string;
   formControl: any;
-  onChange?: (option: OptionProps | undefined) => void;
+  onChange?: (option: string | undefined) => void;
 } & React.HTMLAttributes<HTMLButtonElement>) {
   return (
     <FormField
@@ -65,10 +65,15 @@ export function ComboBox({
                   )}
                   style={props.style}
                 >
-                  {field.value?.label ? (
+                  {field.value ? (
                     <div className='flex items-center gap-2 '>
-                      {field.value?.icon}
-                      <span className='truncate'>{field.value?.label}</span>
+                      {options.find((item) => item.value === field.value)?.icon}
+                      <span className='truncate'>
+                        {
+                          options.find((item) => item.value === field.value)
+                            ?.label
+                        }
+                      </span>
                     </div>
                   ) : (
                     <span className='text-muted-foreground'>{icon}</span>
@@ -94,7 +99,7 @@ function OptionList({
   onChange,
   options,
 }: {
-  onChange: (status: OptionProps | undefined) => void;
+  onChange: (selectedOption: string | undefined) => void;
   options: OptionProps[];
 }) {
   return (
@@ -114,6 +119,7 @@ function OptionList({
                 onSelect={(value) => {
                   onChange(
                     options.find((indvidual) => indvidual.value === value)
+                      ?.value
                   );
                   console.log(value);
                 }}

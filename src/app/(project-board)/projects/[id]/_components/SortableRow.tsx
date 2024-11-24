@@ -62,16 +62,18 @@ export function SortbaleRow({
           id: data.assignee.id,
         },
       ],
-      status: {
-        value: data.status.value || statusOptions[0].value,
-        label: data.status.label || statusOptions[0].label,
-        icon: data.status.icon || statusOptions[0].icon,
-      },
-      priority: {
-        value: data.priority.value,
-        label: data.priority.label,
-        icon: data.priority.icon,
-      },
+      // status: {
+      //   value: data.status.value || statusOptions[0].value,
+      //   label: data.status.label || statusOptions[0].label,
+      //   icon: data.status.icon || statusOptions[0].icon,
+      // },
+      // priority: {
+      //   value: data.priority.value,
+      //   label: data.priority.label,
+      //   icon: data.priority.icon,
+      // },
+      status: data.status,
+      priority: data.priority,
       dueDate: data.dueDate,
     },
   });
@@ -89,8 +91,8 @@ export function SortbaleRow({
     // Create a mapping of the watched fields to their corresponding keys in the task
     const updates = {
       assignee: assignee,
-      status: status?.value,
-      priority: priority?.value,
+      status: status,
+      priority: priority,
       dueDate: dueDate && formatISO(dueDate),
     };
 
@@ -106,7 +108,7 @@ export function SortbaleRow({
         );
       }
     });
-  }, [assignee, data.id, priority?.value, setTaskList, status?.value, dueDate]);
+  }, [assignee, data.id, priority, setTaskList, status, dueDate]);
 
   useEffect(() => {
     if (subTasksOpen.open && isDragging) {
@@ -116,6 +118,8 @@ export function SortbaleRow({
       });
     }
   }, [data.id, isDragging, subTasksOpen.open]);
+
+  console.log({ data });
 
   return (
     <>
@@ -243,16 +247,8 @@ function SubtaskRow({
           id: data.assignee.id,
         },
       ],
-      status: {
-        value: data.status.value || statusOptions[0].value,
-        label: data.status.label || statusOptions[0].label,
-        icon: data.status.icon || statusOptions[0].icon,
-      },
-      priority: {
-        value: data.priority.value,
-        label: data.priority.label,
-        icon: data.priority.icon,
-      },
+      status: data.status,
+      priority: data.priority,
       dueDate: data.dueDate,
     },
   });
@@ -270,8 +266,8 @@ function SubtaskRow({
     // Create a mapping of the watched fields to their corresponding keys in the task
     const updates = {
       assignee: assignee,
-      status: status?.value,
-      priority: priority?.value,
+      status: status,
+      priority: priority,
       dueDate: dueDate && formatISO(dueDate),
     };
 
@@ -295,15 +291,7 @@ function SubtaskRow({
         );
       }
     });
-  }, [
-    assignee,
-    mainRowId,
-    priority?.value,
-    setTaskList,
-    status?.value,
-    dueDate,
-    data.id,
-  ]);
+  }, [assignee, mainRowId, priority, setTaskList, status, dueDate, data.id]);
   return (
     <TableRow key={data?.id} className={cn(showSubTasks.open ? "" : "hidden")}>
       <TableCell></TableCell>
