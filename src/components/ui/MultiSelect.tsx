@@ -64,7 +64,7 @@ export function MultiSelect({
                 <Button
                   variant='outline'
                   className={cn(
-                    "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background",
+                    "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
                     props.className
                   )}
                   style={props.style}
