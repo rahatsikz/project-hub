@@ -1,75 +1,25 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { DndContext } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { SortbaleRow } from "./SortableRow";
-import {
-  dummyAssigne,
-  dummyTaskList,
-  priorityOptions,
-  statusOptions,
-} from "@/constant/global";
-import { Button } from "@/components/ui/button";
-import { CircleDashed, Flag, Plus, UserPlus } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
-import { MultiSelect } from "@/components/ui/MultiSelect";
-import { ComboBox } from "@/components/ui/ComboBox";
-import { DatePicker } from "@/components/ui/DatePicker";
+import { dummyTaskList } from "@/constant/global";
+import AddTaskRow from "./AddTaskRow";
 
 export default function ListSection() {
   const [isDragging, setIsDragging] = useState(false);
-  const [isAddingTask, setIsAddingTask] = useState(false);
-  const containerRef = useRef<HTMLTableRowElement>(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const childRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ];
 
   const [taskList, setTaskList] = useState(dummyTaskList);
 
   console.log({ taskList });
-
-  const form = useForm({
-    defaultValues: {
-      name: "",
-      assignee: null,
-    },
-  });
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const isInsideContainer = containerRef.current?.contains(
-        event.target as Node
-      );
-
-      const isInsideChildren = childRefs.some((ref) =>
-        ref.current?.contains(event.target as Node)
-      );
-
-      if (!isInsideContainer && !isInsideChildren) {
-        setIsAddingTask(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isAddingTask, childRefs]);
 
   const tableHeader = Object.keys(taskList[0])
     .filter((key) => key !== "subTasks")
@@ -146,80 +96,7 @@ export default function ListSection() {
                 setTaskList={setTaskList}
               />
             ))}
-            <TableRow ref={containerRef}>
-              <TableCell></TableCell>
-              <Form {...form}>
-                <TableCell colSpan={tableHeader.length}>
-                  {isAddingTask ? (
-                    <form className='flex justify-between'>
-                      <Input name='name' formControl={form.control} autoFocus />
-                      <div className='flex gap-2 items-center'>
-                        <div className='inline-flex gap-1.5'>
-                          <MultiSelect
-                            formControl={form.control}
-                            name='assignee'
-                            options={dummyAssigne}
-                            icon={<UserPlus />}
-                            className='w-fit truncate'
-                            ref={childRefs[0]}
-                          />
-
-                          <DatePicker
-                            formController={form.control}
-                            name='dueDate'
-                            ref={childRefs[1]}
-                          />
-
-                          <ComboBox
-                            formControl={form.control}
-                            name='priority'
-                            options={priorityOptions}
-                            icon={<Flag />}
-                            className={cn("w-fit truncate")}
-                            boxAlignment='end'
-                            ref={childRefs[2]}
-                          />
-
-                          <ComboBox
-                            formControl={form.control}
-                            name='status'
-                            options={statusOptions}
-                            icon={<CircleDashed />}
-                            className={cn("truncate w-fit ")}
-                            boxAlignment='end'
-                            ref={childRefs[3]}
-                          />
-                        </div>
-                        <div>
-                          <Button
-                            variant='outline'
-                            size={"sm"}
-                            onClick={() => setIsAddingTask(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant={"default"}
-                            type='submit'
-                            className='ml-2 h-7'
-                            size={"sm"}
-                          >
-                            Add Task
-                          </Button>
-                        </div>
-                      </div>
-                    </form>
-                  ) : (
-                    <Button
-                      variant='ghost'
-                      onClick={() => setIsAddingTask(true)}
-                    >
-                      <Plus /> Add Task
-                    </Button>
-                  )}
-                </TableCell>
-              </Form>
-            </TableRow>
+            <AddTaskRow />
           </TableBody>
         </Table>
       </SortableContext>
