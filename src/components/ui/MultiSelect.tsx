@@ -36,83 +36,86 @@ export type OptionProps = {
   id: number;
 };
 
-export function MultiSelect({
-  options,
-  label,
-  icon,
-  name,
-  formControl,
-  ...props
-}: {
+export interface MultiSelectProps extends React.HTMLAttributes<HTMLDivElement> {
   options: OptionProps[];
   label?: string;
   icon?: React.ReactNode;
   name: string;
   formControl: any;
-  onChange?: (option: OptionProps[] | undefined) => void;
-} & React.HTMLAttributes<HTMLButtonElement>) {
-  return (
-    <FormField
-      control={formControl}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          {label ? <FormLabel>{label}</FormLabel> : null}
-          <FormControl>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant='outline'
-                  className={cn(
-                    "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
-                    props.className
-                  )}
-                  style={props.style}
-                >
-                  {field.value &&
-                  field.value.filter((item: any) => item.value !== undefined)
-                    .length > 0 ? (
-                    <div className='flex items-center gap-2 flex-wrap'>
-                      {field.value
-                        .filter((item: any) => item.value !== undefined)
-                        .map((option: OptionProps, idx: number) => (
-                          <span
-                            key={idx}
-                            className='text-xs bg-primary rounded-full size-7 flex items-center justify-center text-white'
-                          >
-                            {option.acronym || option.label}
-                          </span>
-                        ))}
-                    </div>
-                  ) : (
-                    <span className='text-muted-foreground'>
-                      {icon || "Select options"}
-                    </span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className='w-[200px] p-0' align='start'>
-                <OptionList
-                  onChange={(selectedOptions) =>
-                    field.onChange(selectedOptions)
-                  }
-                  options={options}
-                  checkedState={
-                    field.value?.filter(
-                      (item: any) => item.value !== undefined
-                    ) || []
-                  }
-                />
-              </PopoverContent>
-            </Popover>
-          </FormControl>
-
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
 }
+
+export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
+  ({ options, label, icon, name, formControl, ...props }, ref) => {
+    return (
+      <FormField
+        control={formControl}
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            {label ? <FormLabel>{label}</FormLabel> : null}
+            <FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    className={cn(
+                      "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
+                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
+                      props.className
+                    )}
+                    style={props.style}
+                  >
+                    {field.value &&
+                    field.value.filter((item: any) => item.value !== undefined)
+                      .length > 0 ? (
+                      <div className='flex items-center gap-2 flex-wrap'>
+                        {field.value
+                          .filter((item: any) => item.value !== undefined)
+                          .map((option: OptionProps, idx: number) => (
+                            <span
+                              key={idx}
+                              className='text-xs bg-primary rounded-full size-7 flex items-center justify-center text-white'
+                            >
+                              {option.acronym || option.label}
+                            </span>
+                          ))}
+                      </div>
+                    ) : (
+                      <span className='text-muted-foreground'>
+                        {icon || "Select options"}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className='w-[200px] p-0'
+                  align='start'
+                  ref={ref}
+                >
+                  <OptionList
+                    onChange={(selectedOptions) =>
+                      field.onChange(selectedOptions)
+                    }
+                    options={options}
+                    checkedState={
+                      field.value?.filter(
+                        (item: any) => item.value !== undefined
+                      ) || []
+                    }
+                  />
+                </PopoverContent>
+              </Popover>
+            </FormControl>
+
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  }
+);
+
+MultiSelect.displayName = "MultiSelect";
 
 function OptionList({
   onChange,

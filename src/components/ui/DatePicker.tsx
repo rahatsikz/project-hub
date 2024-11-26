@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, CalendarPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,9 +24,15 @@ type DatePickerProps = {
   label?: string;
   formController: Control<any>;
   name: string;
+  ref?: React.Ref<any>;
 };
 
-export function DatePicker({ label, formController, name }: DatePickerProps) {
+export function DatePicker({
+  label,
+  formController,
+  name,
+  ref,
+}: DatePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -42,20 +48,23 @@ export function DatePicker({ label, formController, name }: DatePickerProps) {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background max-w-36",
+                    "w-full justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background max-w-36 bg-transparent",
+                    "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
                     !field.value && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className='mr-1 h-4 w-4' />
                   {field.value ? (
-                    <span>{format(field.value, "MMM dd, yyyy")}</span>
+                    <span className='inline-flex gap-2 items-center'>
+                      <CalendarIcon className='mr-1 size-4' />{" "}
+                      {format(field.value, "MMM dd, yyyy")}
+                    </span>
                   ) : (
-                    <span>Pick a date</span>
+                    <CalendarPlus className='size-4' />
                   )}
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className='w-auto p-0'>
+            <PopoverContent className='w-auto p-0' ref={ref}>
               <Calendar
                 mode='single'
                 defaultMonth={field.value}
