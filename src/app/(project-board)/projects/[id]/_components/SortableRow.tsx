@@ -27,6 +27,7 @@ import { formatISO } from "date-fns";
 import { ComboBox } from "@/components/ui/ComboBox";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { Input } from "@/components/ui/input";
+import { AddSubTaskRow } from "./AddTaskRow";
 
 export function SortbaleRow({
   data,
@@ -118,6 +119,9 @@ export function SortbaleRow({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const toggleButtonRef = useRef<HTMLButtonElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
   useEffect(() => {
     if (isNameEditing && inputRef.current) {
       inputRef.current.focus();
@@ -125,10 +129,8 @@ export function SortbaleRow({
 
     // Handle clicks outside the container
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Node;
+      if (containerRef.current && !containerRef.current.contains(target)) {
         setIsNameEditing(false);
       }
     };
@@ -137,7 +139,7 @@ export function SortbaleRow({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isNameEditing]);
+  }, [isNameEditing, data.id]);
 
   return (
     <>
@@ -159,12 +161,16 @@ export function SortbaleRow({
         <Form {...form}>
           <TableCell className='flex items-center gap-2 w-full '>
             <Button
+              ref={toggleButtonRef}
               variant='ghost'
               size='sm'
               onClick={() =>
                 setSubTasksOpen({
                   id: data.id,
-                  open: !subTasksOpen.open,
+                  open:
+                    subTasksOpen.id === data.id
+                      ? !subTasksOpen.open
+                      : subTasksOpen.open,
                 })
               }
             >
@@ -239,7 +245,7 @@ export function SortbaleRow({
             </div>
           </TableCell>
           <TableCell>
-            <form>
+            <form ref={formRef}>
               <MultiSelect
                 formControl={form.control}
                 name='assignee'
@@ -307,6 +313,9 @@ export function SortbaleRow({
             mainRowId={data.id}
           />
         ))}
+      {subTasksOpen.open && (
+        <AddSubTaskRow showSubTask={setSubTasksOpen} mainRowId={data.id} />
+      )}
     </>
   );
 }
@@ -447,7 +456,10 @@ function SubtaskRow({
                         ...task,
                         subTasks: (task.subTasks || []).map((subTask: any) => {
                           if (subTask.id === data.id) {
-                            return { ...subTask, name: form.getValues().name };
+                            return {
+                              ...subTask,
+                              name: form.getValues().name,
+                            };
                           }
                           return subTask;
                         }),

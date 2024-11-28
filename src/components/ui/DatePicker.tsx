@@ -66,7 +66,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
                   defaultMonth={field.value}
                   selected={field.value}
                   onSelect={(date) => {
-                    field.onChange(date);
+                    field.onChange(date?.toISOString());
                     setIsOpen(false);
                   }}
                   disabled={(date) => date < new Date()}
