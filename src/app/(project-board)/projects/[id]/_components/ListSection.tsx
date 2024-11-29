@@ -11,17 +11,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SortbaleRow } from "./SortableRow";
-import { dummyTaskList } from "@/constant/global";
 import AddTaskRow from "./AddTaskRow";
+import { dummyTaskList } from "@/constant/global";
 
-export default function ListSection() {
+export default function ListSection({ taskList, setTaskList }: any) {
   const [isDragging, setIsDragging] = useState(false);
-
-  const [taskList, setTaskList] = useState(dummyTaskList);
 
   console.log({ taskList });
 
-  const tableHeader = Object.keys(taskList[0])
+  const tableHeader = Object.keys(dummyTaskList[0])
     .filter((key) => key !== "subTasks")
     .map((key) => {
       if (key.includes("Date")) {
@@ -53,11 +51,13 @@ export default function ListSection() {
     const maxIndex = taskList.length - 1; // maximum range (last item index)
 
     if (active?.id && over?.id && active.id !== over.id) {
-      const oldIndex = taskList.findIndex((item) => item.id === active.id);
-      let newIndex = taskList.findIndex((item) => item.id === over.id);
+      const oldIndex = taskList.findIndex((item: any) => item.id === active.id);
+      let newIndex = taskList.findIndex((item: any) => item.id === over.id);
 
       // Restrict the newIndex within range
       newIndex = Math.min(Math.max(newIndex, minIndex), maxIndex);
+
+      // console.log({ oldIndex, newIndex, taskList });
 
       setTaskList(arrayMove(taskList, oldIndex, newIndex));
     }
@@ -70,7 +70,7 @@ export default function ListSection() {
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-      <SortableContext items={taskList.map((item) => item.id)}>
+      <SortableContext items={taskList.map((item: any) => item.id)}>
         <Table className='overflow-hidden'>
           <TableHeader>
             <TableRow>
@@ -88,7 +88,7 @@ export default function ListSection() {
             </TableRow>
           </TableHeader>
           <TableBody className='mt-4 divide-y border-b overflow-hidden'>
-            {taskList.map((item) => (
+            {taskList.map((item: any) => (
               <SortbaleRow
                 key={item.id}
                 data={item}

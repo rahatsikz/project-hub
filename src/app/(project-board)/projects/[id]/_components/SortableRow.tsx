@@ -120,7 +120,6 @@ export function SortbaleRow({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (isNameEditing && inputRef.current) {
@@ -148,7 +147,10 @@ export function SortbaleRow({
         ref={setNodeRef}
         style={style}
         {...attributes}
-        className='group'
+        className={cn(
+          "group",
+          subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted/50"
+        )}
       >
         <TableCell>
           <div
@@ -161,6 +163,11 @@ export function SortbaleRow({
         <Form {...form}>
           <TableCell className='flex items-center gap-2 w-full '>
             <Button
+              className={cn(
+                data.subTasks?.length === 0 &&
+                  !subTasksOpen.open &&
+                  "opacity-0 group-hover:opacity-100"
+              )}
               ref={toggleButtonRef}
               variant='ghost'
               size='sm'
@@ -245,7 +252,7 @@ export function SortbaleRow({
             </div>
           </TableCell>
           <TableCell>
-            <form ref={formRef}>
+            <form>
               <MultiSelect
                 formControl={form.control}
                 name='assignee'
@@ -290,7 +297,7 @@ export function SortbaleRow({
                 className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-16'
                 variant='ghost'
               >
-                <MessageCircle className='size-4 ml-1 text-muted-foreground' />
+                <MessageCircle className='size-4  text-muted-foreground' />
                 {data?.comments?.length ? data?.comments?.length : ""}
               </Button>
             </PopoverTrigger>
@@ -538,7 +545,7 @@ function SubtaskRow({
               className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-14'
               variant='ghost'
             >
-              <MessageCircle className='size-4 ml-1 text-muted-foreground' />
+              <MessageCircle className='size-4  text-muted-foreground' />
               {data?.comments?.length ? data?.comments?.length : ""}
             </Button>
           </PopoverTrigger>

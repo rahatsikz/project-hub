@@ -194,6 +194,7 @@ function TaskAddForm({
     <>
       <Input
         name='name'
+        placeholder={childRefs ? "Enter Task Name" : "Enter Sub task name"}
         className='w-72 border-primary'
         formControl={form.control}
         autoFocus
