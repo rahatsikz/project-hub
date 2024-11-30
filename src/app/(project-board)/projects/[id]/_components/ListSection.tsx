@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import { DndContext } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import {
@@ -47,21 +47,31 @@ export default function ListSection({ taskList, setTaskList }: any) {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    const minIndex = 0; // minimum range (first item index)
-    const maxIndex = taskList.length - 1; // maximum range (last item index)
-
-    if (active?.id && over?.id && active.id !== over.id) {
-      const oldIndex = taskList.findIndex((item: any) => item.id === active.id);
-      let newIndex = taskList.findIndex((item: any) => item.id === over.id);
-
-      // Restrict the newIndex within range
-      newIndex = Math.min(Math.max(newIndex, minIndex), maxIndex);
-
-      // console.log({ oldIndex, newIndex, taskList });
-
-      setTaskList(arrayMove(taskList, oldIndex, newIndex));
-    }
     setIsDragging(false);
+
+    if (!active?.id || !over?.id || active.id === over.id) return;
+
+    const activeItem = taskList.find((item: any) => item.id === active.id);
+    const overItem = taskList.find((item: any) => item.id === over.id);
+
+    if (activeItem && overItem) {
+      setTaskList((prev: any) => {
+        // Find the positions of active and over items in the full task list
+        const oldIndex = prev.findIndex(
+          (item: any) => item.id === activeItem.id
+        );
+        const newIndex = prev.findIndex((item: any) => item.id === overItem.id);
+
+        if (oldIndex === -1 || newIndex === -1) return prev;
+
+        // Reorder the full task list
+        const updatedList = [...prev];
+        const [movedItem] = updatedList.splice(oldIndex, 1);
+        updatedList.splice(newIndex, 0, movedItem);
+
+        return updatedList;
+      });
+    }
   };
 
   const handleDragStart = () => {
