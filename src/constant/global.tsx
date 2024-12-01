@@ -110,7 +110,7 @@ export const dummyTaskList = [
     id: crypto.randomUUID(),
     name: "Task 3",
     assignee: [],
-    dueDate: new Date(),
+    dueDate: "",
     priority: "",
     status: "todo",
     comments: [],

@@ -44,8 +44,8 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background max-w-36 bg-transparent",
-                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
+                      "justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background  bg-transparent",
+                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted w-fit",
                       !field.value && "text-muted-foreground"
                     )}
                   >

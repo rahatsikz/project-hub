@@ -65,7 +65,7 @@ export default function AddTaskRow() {
   }, [isAddingTask, childRefs]);
 
   return (
-    <TableRow ref={containerRef}>
+    <TableRow ref={containerRef} className='max-w-5xl'>
       <TableCell></TableCell>
       <TableCell colSpan={Object.keys(dummyTaskList[0]).length}>
         <Form {...form}>
@@ -195,7 +195,7 @@ function TaskAddForm({
       <Input
         name='name'
         placeholder={childRefs ? "Enter Task Name" : "Enter Sub task name"}
-        className='w-72 border-primary'
+        className='w-60 border-primary'
         formControl={form.control}
         autoFocus
       />

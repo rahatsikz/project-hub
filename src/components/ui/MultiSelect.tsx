@@ -59,7 +59,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                   <Button
                     variant='outline'
                     className={cn(
-                      "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
+                      "w-fit justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
                       "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
                       props.className
                     )}

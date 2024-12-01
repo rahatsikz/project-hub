@@ -155,13 +155,16 @@ export function SortbaleRow({
         <TableCell>
           <div
             {...listeners}
-            className={cn(isDragging ? "cursor-grabbing" : "cursor-grab")}
+            className={cn(
+              isDragging ? "cursor-grabbing" : "cursor-grab",
+              "w-fit"
+            )}
           >
             <GripIcon className='size-4' />
           </div>
         </TableCell>
         <Form {...form}>
-          <TableCell className='flex items-center gap-2 w-full '>
+          <TableCell className='flex items-center gap-2 w-full'>
             <Button
               className={cn(
                 data.subTasks?.length === 0 &&
@@ -200,7 +203,7 @@ export function SortbaleRow({
                     : "flex items-center justify-between w-full"
                 )}
               >
-                <p className='xl:w-60 w-32 line-clamp-1'>{data?.name}</p>
+                <p className='line-clamp-1'>{data?.name}</p>
                 <Button
                   size={"icon"}
                   variant={"ghost"}
@@ -240,7 +243,7 @@ export function SortbaleRow({
                   formControl={form.control}
                   ref={inputRef}
                   type='text'
-                  className='xl:w-52 w-24 border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                  className='border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                 />
                 <Button size={"icon"} variant={"ghost"} type='submit'>
                   <Check
@@ -258,7 +261,7 @@ export function SortbaleRow({
                 name='assignee'
                 options={dummyAssigne}
                 icon={<User />}
-                className='min-w-36 max-w-48 truncate'
+                className=' truncate'
               />
             </form>
           </TableCell>
@@ -274,7 +277,7 @@ export function SortbaleRow({
                 name='priority'
                 options={priorityOptions}
                 icon={<Flag />}
-                className={cn("w-28 truncate")}
+                className={cn("truncate")}
               />
             </form>
           </TableCell>
@@ -284,7 +287,7 @@ export function SortbaleRow({
                 formControl={form.control}
                 name='status'
                 options={statusOptions}
-                className={cn("truncate w-32")}
+                className={cn("truncate")}
                 // style={{ color: status?.color }}
               />
             </form>
@@ -294,7 +297,7 @@ export function SortbaleRow({
           <Popover modal={false}>
             <PopoverTrigger asChild>
               <Button
-                className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-16'
+                className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background'
                 variant='ghost'
               >
                 <MessageCircle className='size-4  text-muted-foreground' />
@@ -441,7 +444,7 @@ function SubtaskRow({
                   : "flex items-center justify-between w-full"
               )}
             >
-              <p className='xl:w-60 w-32 line-clamp-1'>{data?.name}</p>
+              <p className='line-clamp-1'>{data?.name}</p>
               <Button
                 size={"icon"}
                 variant={"ghost"}
@@ -488,7 +491,7 @@ function SubtaskRow({
                 formControl={form.control}
                 ref={inputRef}
                 type='text'
-                className='xl:w-52 w-24 border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                className='border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
               />
               <Button size={"icon"} variant={"ghost"} type='submit'>
                 <Check
@@ -507,7 +510,7 @@ function SubtaskRow({
               name='assignee'
               options={dummyAssigne}
               icon={<User />}
-              className='min-w-36 max-w-48 truncate'
+              className='truncate'
             />
           </form>
         </TableCell>
@@ -523,7 +526,7 @@ function SubtaskRow({
               name='priority'
               options={priorityOptions}
               icon={<Flag />}
-              className={cn("w-28 truncate")}
+              className={cn("truncate")}
             />
           </form>
         </TableCell>
@@ -533,7 +536,7 @@ function SubtaskRow({
               formControl={form.control}
               name='status'
               options={statusOptions}
-              className={cn("w-32 truncate")}
+              className={cn("truncate")}
             />
           </form>
         </TableCell>

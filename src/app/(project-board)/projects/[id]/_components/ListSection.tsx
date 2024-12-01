@@ -85,13 +85,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
           <TableHeader>
             <TableRow>
               {tableHeader.map((item, idx) => (
-                <TableHead
-                  key={idx}
-                  className={cn(
-                    item[Object.keys(item)[0]] === "" ? "w-12 pl-2" : "pl-7",
-                    "capitalize "
-                  )}
-                >
+                <TableHead key={idx} className={cn("capitalize ")}>
                   {item[Object.keys(item)[0]]}
                 </TableHead>
               ))}

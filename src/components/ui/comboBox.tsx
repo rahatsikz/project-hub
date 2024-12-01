@@ -70,7 +70,7 @@ export const ComboBox = React.forwardRef<HTMLDivElement, ComboBoxProps>(
                     title={name.slice(0, 1).toUpperCase() + name.slice(1)}
                     variant='outline'
                     className={cn(
-                      "w-full justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",
+                      "justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent font-normal",
                       "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
                       props.className
                     )}
