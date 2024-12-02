@@ -9,7 +9,7 @@ const Table = React.forwardRef<
   <div className='relative w-full overflow-auto'>
     <table
       ref={ref}
-      className={cn("caption-bottom text-sm w-full", className)}
+      className={cn("caption-bottom text-sm w-full table-container", className)}
       {...props}
     />
   </div>
@@ -73,7 +73,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] w-44 first:w-8 [&:nth-child(2)]:min-w-72 pl-6 [&:nth-child(2)]:pl-[54px]",
+      "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] min-w-44 first:min-w-8 [&:nth-child(2)]:min-w-72 pl-6 [&:nth-child(2)]:pl-[54px] whitespace-nowrap",
       className
     )}
     {...props}
@@ -88,7 +88,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] w-44 first:w-8 [&:nth-child(2)]:min-w-72",
+      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] min-w-44 first:min-w-8 [&:nth-child(2)]:min-w-72",
       className
     )}
     {...props}

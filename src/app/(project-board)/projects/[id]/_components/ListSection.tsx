@@ -81,17 +81,25 @@ export default function ListSection({ taskList, setTaskList }: any) {
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <SortableContext items={taskList.map((item: any) => item.id)}>
-        <Table className='overflow-hidden'>
+        <Table className=''>
           <TableHeader>
-            <TableRow>
+            <TableRow className='group'>
               {tableHeader.map((item, idx) => (
-                <TableHead key={idx} className={cn("capitalize ")}>
+                <TableHead
+                  key={idx}
+                  className={cn(
+                    "capitalize",
+                    item[Object.keys(item)[0]] === "name"
+                      ? "sticky left-0 bg-background hover:bg-muted/10 group-hover:bg-muted/10 transition-colors"
+                      : ""
+                  )}
+                >
                   {item[Object.keys(item)[0]]}
                 </TableHead>
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody className='mt-4 divide-y border-b overflow-hidden'>
+          <TableBody className='mt-4 divide-y border-b '>
             {taskList.map((item: any) => (
               <SortbaleRow
                 key={item.id}

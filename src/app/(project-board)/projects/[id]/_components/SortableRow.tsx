@@ -164,7 +164,12 @@ export function SortbaleRow({
           </div>
         </TableCell>
         <Form {...form}>
-          <TableCell className='flex items-center gap-2 w-full'>
+          <TableCell
+            className={cn(
+              "flex items-center gap-2 w-full sticky left-0 bg-background hover:bg-muted/10 group-hover:bg-muted/10 transition-colors",
+              subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted/10"
+            )}
+          >
             <Button
               className={cn(
                 data.subTasks?.length === 0 &&
@@ -243,7 +248,7 @@ export function SortbaleRow({
                   formControl={form.control}
                   ref={inputRef}
                   type='text'
-                  className='border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                  className='border-0 shadow-none px-0 py-0 h-auto focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 w-40'
                 />
                 <Button size={"icon"} variant={"ghost"} type='submit'>
                   <Check
