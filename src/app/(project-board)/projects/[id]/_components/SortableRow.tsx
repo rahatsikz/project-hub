@@ -149,7 +149,7 @@ export function SortbaleRow({
         {...attributes}
         className={cn(
           "group",
-          subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted/50"
+          subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
         )}
       >
         <TableCell>
@@ -166,8 +166,8 @@ export function SortbaleRow({
         <Form {...form}>
           <TableCell
             className={cn(
-              "flex items-center gap-2 w-full sticky left-0 bg-background hover:bg-muted/10 group-hover:bg-muted/10 transition-colors",
-              subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted/10"
+              "flex items-center gap-2 w-full sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors ",
+              subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
             )}
           >
             <Button
@@ -196,7 +196,6 @@ export function SortbaleRow({
                 )}
               />
             </Button>
-            {/* <div className='min-w-20 max-w-32 truncate'>{data?.name}</div> */}
             <div
               className=' flex items-center w-full justify-between'
               ref={containerRef}
@@ -214,7 +213,7 @@ export function SortbaleRow({
                   variant={"ghost"}
                   onClick={() => setIsNameEditing(true)}
                   className={cn(
-                    "opacity-0  transition-opacity duration-300 ease-in-out",
+                    "opacity-0  transition-opacity",
                     isDragging ? "" : "group-hover:opacity-100"
                   )}
                 >
@@ -436,7 +435,7 @@ function SubtaskRow({
     >
       <TableCell></TableCell>
       <Form {...form}>
-        <TableCell>
+        <TableCell className='sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors pl-4'>
           {/* <div className='min-w-16 max-w-28 truncate ml-4'>{data?.name}</div> */}
           <div
             className=' flex items-center w-full justify-between'

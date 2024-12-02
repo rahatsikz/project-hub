@@ -75,13 +75,13 @@ export default function AddTaskRow() {
   }, [isAddingTask, childRefs]);
 
   return (
-    <TableRow ref={containerRef} className='max-w-5xl'>
+    <TableRow ref={containerRef}>
       <TableCell></TableCell>
       <TableCell colSpan={Object.keys(dummyTaskList[0]).length}>
         <Form {...form}>
           {isAddingTask ? (
             <form
-              className='flex 2xl:justify-between max-2xl:gap-8'
+              className='flex 2xl:justify-between max-2xl:gap-8 pr-4'
               onSubmit={form.handleSubmit(handleAddTask)}
             >
               <TaskAddForm form={form} childRefs={childRefs}>
@@ -150,7 +150,7 @@ export function AddSubTaskRow({
         <Form {...form}>
           {isAddingTask && (
             <form
-              className='flex 2xl:justify-between max-2xl:gap-14'
+              className='flex 2xl:justify-between max-2xl:gap-14 pr-4'
               onSubmit={form.handleSubmit(handleAddSubTask)}
             >
               <TaskAddForm form={form}>

@@ -90,7 +90,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
                   className={cn(
                     "capitalize",
                     item[Object.keys(item)[0]] === "name"
-                      ? "sticky left-0 bg-background hover:bg-muted/10 group-hover:bg-muted/10 transition-colors"
+                      ? "sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors"
                       : ""
                   )}
                 >
