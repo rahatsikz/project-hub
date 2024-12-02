@@ -46,6 +46,16 @@ export default function AddTaskRow() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const isScrollbarClick =
+        event.target instanceof HTMLElement &&
+        (event.target.className.includes("scrollbar") ||
+          event.target.closest(".overflow-auto"));
+
+      if (isScrollbarClick) {
+        // Ignore clicks on the scrollbar
+        return;
+      }
+
       const isInsideContainer =
         containerRef && containerRef.current?.contains(event.target as Node);
 
@@ -71,7 +81,7 @@ export default function AddTaskRow() {
         <Form {...form}>
           {isAddingTask ? (
             <form
-              className='flex justify-between'
+              className='flex 2xl:justify-between max-2xl:gap-8'
               onSubmit={form.handleSubmit(handleAddTask)}
             >
               <TaskAddForm form={form} childRefs={childRefs}>
@@ -140,7 +150,7 @@ export function AddSubTaskRow({
         <Form {...form}>
           {isAddingTask && (
             <form
-              className='flex justify-between'
+              className='flex 2xl:justify-between max-2xl:gap-14'
               onSubmit={form.handleSubmit(handleAddSubTask)}
             >
               <TaskAddForm form={form}>
