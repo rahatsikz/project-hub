@@ -90,7 +90,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
                   className={cn(
                     "capitalize",
                     item[Object.keys(item)[0]] === "name"
-                      ? "sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors"
+                      ? "sticky left-0 bg-background"
                       : ""
                   )}
                 >
@@ -99,7 +99,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody className='mt-4 divide-y border-b '>
+          <TableBody className='mt-4 '>
             {taskList.map((item: any) => (
               <SortbaleRow
                 key={item.id}

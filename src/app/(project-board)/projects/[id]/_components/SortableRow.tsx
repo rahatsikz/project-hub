@@ -148,8 +148,9 @@ export function SortbaleRow({
         style={style}
         {...attributes}
         className={cn(
-          "group",
+          "group ",
           subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
+          // !isDragging && "hover:bg-primary"
         )}
       >
         <TableCell>
@@ -166,8 +167,9 @@ export function SortbaleRow({
         <Form {...form}>
           <TableCell
             className={cn(
-              "flex items-center gap-2 w-full sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors ",
-              subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
+              "flex items-center gap-2 w-full sticky left-0 bg-background ",
+              subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted",
+              isDragging && "bg-transparent border-b-0"
             )}
           >
             <Button
@@ -435,7 +437,7 @@ function SubtaskRow({
     >
       <TableCell></TableCell>
       <Form {...form}>
-        <TableCell className='sticky left-0 bg-background hover:bg-muted group-hover:bg-muted transition-colors pl-4'>
+        <TableCell className='sticky left-0 bg-background pl-4'>
           {/* <div className='min-w-16 max-w-28 truncate ml-4'>{data?.name}</div> */}
           <div
             className=' flex items-center w-full justify-between'

@@ -76,8 +76,11 @@ export default function AddTaskRow() {
 
   return (
     <TableRow ref={containerRef}>
-      <TableCell></TableCell>
-      <TableCell colSpan={Object.keys(dummyTaskList[0]).length}>
+      <TableCell className='group-hover:bg-transparent'></TableCell>
+      <TableCell
+        colSpan={Object.keys(dummyTaskList[0]).length}
+        className='group-hover:bg-transparent'
+      >
         <Form {...form}>
           {isAddingTask ? (
             <form
@@ -145,8 +148,11 @@ export function AddSubTaskRow({
 
   return (
     <TableRow ref={containerRef} className={cn(!isAddingTask && "hidden")}>
-      <TableCell></TableCell>
-      <TableCell colSpan={Object.keys(dummyTaskList[0]).length}>
+      <TableCell className='group-hover:bg-transparent'></TableCell>
+      <TableCell
+        colSpan={Object.keys(dummyTaskList[0]).length}
+        className='group-hover:bg-transparent'
+      >
         <Form {...form}>
           {isAddingTask && (
             <form
