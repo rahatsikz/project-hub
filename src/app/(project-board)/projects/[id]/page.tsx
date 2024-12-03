@@ -25,7 +25,7 @@ export default function ProjectPage() {
         {statusOptions.map((task) => {
           return (
             <div key={task.value}>
-              <h1>{task.label}</h1>
+              <h1 className='mb-4 max-lg:text-center'>{task.label}</h1>
               {groupedTaskList[task.value] ? (
                 <ListSection
                   taskList={groupedTaskList[task.value]}

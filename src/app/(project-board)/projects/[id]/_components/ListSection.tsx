@@ -13,6 +13,7 @@ import {
 import { SortbaleRow } from "./SortableRow";
 import AddTaskRow from "./AddTaskRow";
 import { dummyTaskList } from "@/constant/global";
+import ListCard from "./ListCard";
 
 export default function ListSection({ taskList, setTaskList }: any) {
   const [isDragging, setIsDragging] = useState(false);
@@ -81,7 +82,8 @@ export default function ListSection({ taskList, setTaskList }: any) {
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <SortableContext items={taskList.map((item: any) => item.id)}>
-        <Table className=''>
+        {/* table */}
+        <Table className='hidden lg:table'>
           <TableHeader>
             <TableRow className='group'>
               {tableHeader.map((item, idx) => (
@@ -99,7 +101,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody className='mt-4 '>
+          <TableBody>
             {taskList.map((item: any) => (
               <SortbaleRow
                 key={item.id}
@@ -111,6 +113,12 @@ export default function ListSection({ taskList, setTaskList }: any) {
             <AddTaskRow />
           </TableBody>
         </Table>
+        {/* card */}
+        <div className='lg:hidden grid md:grid-cols-2 gap-4'>
+          {taskList.map((item: any) => (
+            <ListCard key={item.id} item={item} />
+          ))}
+        </div>
       </SortableContext>
     </DndContext>
   );

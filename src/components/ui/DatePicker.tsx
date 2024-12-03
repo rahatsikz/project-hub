@@ -28,7 +28,7 @@ export interface DatePickerProps
 }
 
 export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
-  ({ label, formController, name }, ref) => {
+  ({ label, formController, name, ...props }, ref) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
@@ -46,7 +46,8 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
                     className={cn(
                       "justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background  bg-transparent",
                       "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted w-fit",
-                      !field.value && "text-muted-foreground"
+                      !field.value && "text-muted-foreground",
+                      props.className
                     )}
                   >
                     {field.value ? (

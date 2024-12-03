@@ -148,9 +148,8 @@ export function SortbaleRow({
         style={style}
         {...attributes}
         className={cn(
-          "group ",
+          "group",
           subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
-          // !isDragging && "hover:bg-primary"
         )}
       >
         <TableCell>
@@ -176,7 +175,8 @@ export function SortbaleRow({
               className={cn(
                 data.subTasks?.length === 0 &&
                   !subTasksOpen.open &&
-                  "opacity-0 group-hover:opacity-100"
+                  "opacity-0",
+                isDragging ? "" : "group-hover:opacity-100"
               )}
               ref={toggleButtonRef}
               variant='ghost'
