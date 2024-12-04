@@ -13,7 +13,7 @@ import {
 import { SortbaleRow } from "./SortableRow";
 import AddTaskRow from "./AddTaskRow";
 import { dummyTaskList } from "@/constant/global";
-import ListCard from "./ListCard";
+import ListCard, { AddListCard } from "./ListCard";
 
 export default function ListSection({ taskList, setTaskList }: any) {
   const [isDragging, setIsDragging] = useState(false);
@@ -114,10 +114,13 @@ export default function ListSection({ taskList, setTaskList }: any) {
           </TableBody>
         </Table>
         {/* card */}
-        <div className='lg:hidden grid md:grid-cols-2 gap-4'>
-          {taskList.map((item: any) => (
-            <ListCard key={item.id} item={item} />
-          ))}
+        <div className='lg:hidden'>
+          <div className='grid md:grid-cols-2 gap-4 mb-4'>
+            {taskList.map((item: any) => (
+              <ListCard key={item.id} item={item} />
+            ))}
+          </div>
+          <AddListCard />
         </div>
       </SortableContext>
     </DndContext>
