@@ -1,8 +1,10 @@
 import {
   CircleCheckBig,
+  CircleDashed,
   CircleDot,
   CircleFadingArrowUp,
   Flag,
+  User,
 } from "lucide-react";
 
 export const dummyAssigne = [
@@ -53,6 +55,29 @@ export const statusOptions = [
     icon: (
       <CircleCheckBig style={{ strokeWidth: 3, stroke: "lightseagreen" }} />
     ),
+  },
+];
+
+export const groupOptions = [
+  {
+    value: "none",
+    label: "None",
+    icon: <CircleDashed />,
+  },
+  {
+    value: "assignee",
+    label: "Assignee",
+    icon: <User />,
+  },
+  {
+    value: "status",
+    label: "Status",
+    icon: <CircleFadingArrowUp />,
+  },
+  {
+    value: "priority",
+    label: "Priority",
+    icon: <Flag />,
   },
 ];
 
