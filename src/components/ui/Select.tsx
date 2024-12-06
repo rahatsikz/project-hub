@@ -72,17 +72,13 @@ export const Select = React.forwardRef<HTMLDivElement, ComboBoxProps>(
                     title={name.slice(0, 1).toUpperCase() + name.slice(1)}
                     variant='outline'
                     className={cn(
-                      "justify-start shadow-none hover:bg-background hover:border-muted-foreground bg-transparent font-normal",
-                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted",
+                      "justify-start shadow-none hover:bg-background hover:border-muted-foreground bg-transparent font-normal text-muted-foreground",
+                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted data-[state=open]:text-foreground",
                       props.className
                     )}
                     style={props.style}
                   >
-                    <span
-                      className={cn(
-                        "text-muted-foreground flex items-center gap-2"
-                      )}
-                    >
+                    <span className={cn(" flex items-center gap-2 ")}>
                       <span className='flex items-center gap-1'>
                         {icon} {labelPosition === "center" ? label : ""} :
                       </span>
