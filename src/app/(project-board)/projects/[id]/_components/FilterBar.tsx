@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { GripVertical, Layers } from "lucide-react";
+import { Grid2X2, GripVertical, Layers } from "lucide-react";
 import { Select } from "@/components/ui/Select";
 import { dummyFields, groupOptions } from "@/constant/global";
 import {
@@ -19,14 +19,13 @@ import { DndContext } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const FilterBar = () => {
+const FilterBar = ({ columnFields, setColumnFields }: any) => {
   const form = useForm({
     defaultValues: {
       group: groupOptions[2].value,
     },
   });
 
-  const [columnFields, setColumnFields] = useState(dummyFields);
   const [isDragging, setIsDragging] = useState(false);
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -83,6 +82,7 @@ const FilterBar = () => {
                   "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted data-[state=open]:text-foreground"
                 )}
               >
+                <Grid2X2 className='size-4' />
                 Columns
               </Button>
             </SheetTrigger>

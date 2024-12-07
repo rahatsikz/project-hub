@@ -73,7 +73,7 @@ export const Select = React.forwardRef<HTMLDivElement, ComboBoxProps>(
                     variant='outline'
                     className={cn(
                       "justify-start shadow-none hover:bg-background hover:border-muted-foreground bg-transparent font-normal text-muted-foreground",
-                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted data-[state=open]:text-foreground",
+                      "data-[state=open]:ring-2 data-[state=open]:ring-primary data-[state=open]:bg-muted data-[state=open]:text-foreground data-[state=open]:border-transparent",
                       props.className
                     )}
                     style={props.style}
