@@ -27,10 +27,10 @@ export default function ListCard({ item }: any) {
       name: item.name,
       assignee: [
         {
-          value: item.assignee.value,
-          label: item.assignee.label,
-          acronym: item.assignee.acronym,
-          id: item.assignee.id,
+          value: item?.assignee?.value,
+          label: item?.assignee?.label,
+          acronym: item?.assignee?.acronym,
+          id: item?.assignee?.id,
         },
       ],
       status: item.status || statusOptions[0].value,

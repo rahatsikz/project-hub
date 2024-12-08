@@ -18,8 +18,9 @@ import { Switch } from "@/components/ui/switch";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useColumnStore } from "@/store";
 
-const FilterBar = ({ columnFields, setColumnFields }: any) => {
+const FilterBar = () => {
   const form = useForm({
     defaultValues: {
       group: groupOptions[2].value,
@@ -27,6 +28,8 @@ const FilterBar = ({ columnFields, setColumnFields }: any) => {
   });
 
   const [isDragging, setIsDragging] = useState(false);
+  const [columnFields, setColumnFields] = useState(dummyFields);
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     setIsDragging(false);
@@ -173,13 +176,16 @@ function IndividualField({
 
   const checkedValue = watch(name);
 
+  const addToColumnArray = useColumnStore((state) => state.AddToColumnArray);
+
   useEffect(() => {
     updateColumn((prev: any) =>
       prev.map((item: any) =>
         item.id === id ? { ...item, checked: checkedValue } : item
       )
     );
-  }, [checkedValue, id, updateColumn]);
+    addToColumnArray(name, checkedValue);
+  }, [checkedValue, id, updateColumn, addToColumnArray, name]);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: id });
@@ -210,20 +216,27 @@ function IndividualField({
           !checked && "hidden"
         )}
       />
-      <label
-        htmlFor={id}
-        className={cn("text-sm", label === "Name" && "text-muted-foreground")}
-      >
-        {label}
-      </label>
-      <Switch
-        id={id}
-        className='h-4 w-7'
-        name={name}
-        formControl={form.control}
-        style={{ marginLeft: "auto" }}
-        disabled={label === "Name"}
-      />
+      <Form {...form}>
+        <form className='w-full flex items-center'>
+          <label
+            htmlFor={id}
+            className={cn(
+              "text-sm",
+              label === "Name" && "text-muted-foreground"
+            )}
+          >
+            {label}
+          </label>
+          <Switch
+            id={id}
+            className='h-4 w-7'
+            name={name}
+            formControl={form.control}
+            style={{ marginLeft: "auto" }}
+            disabled={label === "Name"}
+          />
+        </form>
+      </Form>
     </div>
   );
 }

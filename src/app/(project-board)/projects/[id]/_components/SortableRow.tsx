@@ -61,10 +61,10 @@ export function SortbaleRow({
       name: data.name,
       assignee: [
         {
-          value: data.assignee.value,
-          label: data.assignee.label,
-          acronym: data.assignee.acronym,
-          id: data.assignee.id,
+          value: data?.assignee?.value,
+          label: data?.assignee?.label,
+          acronym: data?.assignee?.acronym,
+          id: data?.assignee?.id,
         },
       ],
       status: data.status || statusOptions[0].value,

@@ -144,10 +144,30 @@ export const dummyTaskList = [
 ];
 
 export const dummyFields = [
-  { id: "1", name: "name", label: "Name", checked: true },
-  { id: "2", name: "assignee", label: "Assignee", checked: true },
-  { id: "3", name: "status", label: "Status", checked: true },
-  { id: "4", name: "priority", label: "Priority", checked: true },
-  { id: "5", name: "dueDate", label: "Due Date", checked: true },
-  { id: "6", name: "comments", label: "Comments", checked: false },
+  { id: crypto.randomUUID(), name: "name", label: "Name", checked: true },
+  {
+    id: crypto.randomUUID(),
+    name: "assignee",
+    label: "Assignee",
+    checked: true,
+  },
+  { id: crypto.randomUUID(), name: "status", label: "Status", checked: true },
+  {
+    id: crypto.randomUUID(),
+    name: "priority",
+    label: "Priority",
+    checked: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "dueDate",
+    label: "Due Date",
+    checked: true,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "comments",
+    label: "Comments",
+    checked: false,
+  },
 ];
