@@ -1,33 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { DatePicker } from "@/components/ui/DatePicker";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  Check,
-  ChevronRight,
-  Edit,
-  Flag,
-  GripIcon,
-  MessageCircle,
-  User,
-} from "lucide-react";
+import { Check, ChevronRight, Edit, GripIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { CommentPopover } from "./CommentPopover";
-import {
-  dummyAssigne,
-  priorityOptions,
-  statusOptions,
-} from "@/constant/global";
+import { statusOptions } from "@/constant/global";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { formatISO } from "date-fns";
-import { ComboBox } from "@/components/ui/ComboBox";
-import { MultiSelect } from "@/components/ui/MultiSelect";
 import { Input } from "@/components/ui/input";
 import { AddSubTaskRow } from "./AddTaskRow";
+import { useColumnStore } from "@/store";
+import { cellOfRows } from "./AllListCell";
 
 export function SortbaleRow({
   data,
@@ -42,6 +27,8 @@ export function SortbaleRow({
     id: data.id,
     open: false,
   });
+
+  const columnArr = useColumnStore((state) => state.ColumnArr);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: data.id });
@@ -67,7 +54,7 @@ export function SortbaleRow({
           id: data?.assignee?.id,
         },
       ],
-      status: data.status || statusOptions[0].value,
+      status: data.status,
       priority: data.priority,
       dueDate: data.dueDate,
     },
@@ -260,64 +247,14 @@ export function SortbaleRow({
               </form>
             </div>
           </TableCell>
-          <TableCell>
-            <form>
-              <MultiSelect
-                formControl={form.control}
-                name='assignee'
-                options={dummyAssigne}
-                icon={<User />}
-                className=' truncate'
-              />
-            </form>
-          </TableCell>
-          <TableCell>
-            <form>
-              <DatePicker formController={form.control} name='dueDate' />
-            </form>
-          </TableCell>
-          <TableCell>
-            <form>
-              <ComboBox
-                formControl={form.control}
-                name='priority'
-                options={priorityOptions}
-                icon={<Flag />}
-                className={cn("truncate")}
-              />
-            </form>
-          </TableCell>
-          <TableCell>
-            <form>
-              <ComboBox
-                formControl={form.control}
-                name='status'
-                options={statusOptions}
-                className={cn("truncate")}
-                // style={{ color: status?.color }}
-              />
-            </form>
-          </TableCell>
-        </Form>
-        <TableCell>
-          <Popover modal={false}>
-            <PopoverTrigger asChild>
-              <Button
-                className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background'
-                variant='ghost'
-              >
-                <MessageCircle className='size-4  text-muted-foreground' />
-                {data?.comments?.length ? data?.comments?.length : ""}
-              </Button>
-            </PopoverTrigger>
 
-            <CommentPopover
-              commnetsData={data.comments}
-              setTaskList={setTaskList}
-              id={data.id}
-            />
-          </Popover>
-        </TableCell>
+          {columnArr.map(
+            (item: any) =>
+              cellOfRows(item, form, data, setTaskList)[
+                item as keyof typeof cellOfRows
+              ]
+          )}
+        </Form>
       </TableRow>
       {data?.subTasks?.length > 0 &&
         data.subTasks.map((item: any) => (
@@ -347,6 +284,8 @@ function SubtaskRow({
   showSubTasks: { id: string; open: boolean };
   mainRowId: string;
 }) {
+  const columnArr = useColumnStore((state) => state.ColumnArr);
+
   const form = useForm({
     defaultValues: {
       name: data.name,
@@ -509,64 +448,13 @@ function SubtaskRow({
           </div>
         </TableCell>
 
-        <TableCell>
-          <form>
-            <MultiSelect
-              formControl={form.control}
-              name='assignee'
-              options={dummyAssigne}
-              icon={<User />}
-              className='truncate'
-            />
-          </form>
-        </TableCell>
-        <TableCell>
-          <form>
-            <DatePicker formController={form.control} name='dueDate' />
-          </form>
-        </TableCell>
-        <TableCell>
-          <form>
-            <ComboBox
-              formControl={form.control}
-              name='priority'
-              options={priorityOptions}
-              icon={<Flag />}
-              className={cn("truncate")}
-            />
-          </form>
-        </TableCell>
-        <TableCell>
-          <form>
-            <ComboBox
-              formControl={form.control}
-              name='status'
-              options={statusOptions}
-              className={cn("truncate")}
-            />
-          </form>
-        </TableCell>
+        {columnArr.map(
+          (item: any) =>
+            cellOfRows(item, form, data, setTaskList)[
+              item as keyof typeof cellOfRows
+            ]
+        )}
       </Form>
-      <TableCell>
-        <Popover modal={false}>
-          <PopoverTrigger asChild>
-            <Button
-              className='flex items-center justify-start gap-2 hover:ring-2 hover:ring-primary hover:bg-background min-w-14'
-              variant='ghost'
-            >
-              <MessageCircle className='size-4  text-muted-foreground' />
-              {data?.comments?.length ? data?.comments?.length : ""}
-            </Button>
-          </PopoverTrigger>
-
-          <CommentPopover
-            commnetsData={data.comments}
-            setTaskList={setTaskList}
-            id={data.id}
-            isSubtask={true}
-          />
-        </Popover>
-      </TableCell>
     </TableRow>
   );
 }

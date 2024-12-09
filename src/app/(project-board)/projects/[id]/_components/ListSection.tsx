@@ -18,28 +18,10 @@ import { useColumnStore } from "@/store";
 export default function ListSection({ taskList, setTaskList }: any) {
   const [isDragging, setIsDragging] = useState(false);
   const columnArr = useColumnStore((state) => state.ColumnArr);
-  console.log(columnArr, "columnArr");
 
   console.log({ taskList });
 
-  // const tableHeader = Object.keys(dummyTaskList[0])
-  //   .filter((key) => key !== "subTasks")
-  //   .map((key) => {
-  //     if (key.includes("Date")) {
-  //       return {
-  //         [key]: "due date",
-  //       };
-  //     } else if (key.includes("id")) {
-  //       return {
-  //         [key]: "",
-  //       };
-  //     }
-  //     return {
-  //       [key]: key,
-  //     };
-  //   });
-
-  // Inside your ListSection component
+  // for hydration error fix on dnd
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -81,23 +63,24 @@ export default function ListSection({ taskList, setTaskList }: any) {
     setIsDragging(true);
   };
 
+  const headers = {
+    id: "",
+    name: "name",
+    assignee: "assignee",
+    dueDate: "due date",
+    priority: "priority",
+    status: "status",
+    comments: "comments",
+  };
+
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <SortableContext items={taskList.map((item: any) => item.id)}>
         {/* table */}
-        {columnArr.toString()}
         <Table className='hidden lg:table'>
           <TableHeader>
             <TableRow className='group'>
-              {[
-                "",
-                "name",
-                "assignee",
-                "due date",
-                "priority",
-                "status",
-                "comments",
-              ].map((item, idx) => (
+              {columnArr.map((item, idx) => (
                 <TableHead
                   key={idx}
                   className={cn(
@@ -105,7 +88,7 @@ export default function ListSection({ taskList, setTaskList }: any) {
                     item === "name" ? "sticky left-0 bg-background" : ""
                   )}
                 >
-                  {item}
+                  {headers[item as keyof typeof headers]}
                 </TableHead>
               ))}
             </TableRow>

@@ -29,6 +29,7 @@ const FilterBar = () => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [columnFields, setColumnFields] = useState(dummyFields);
+  const addToColumnArray = useColumnStore((state) => state.AddToColumnArray);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -58,6 +59,12 @@ const FilterBar = () => {
       });
     }
   };
+
+  useEffect(() => {
+    addToColumnArray(
+      columnFields.filter((item) => item.checked).map((item: any) => item.name)
+    );
+  }, [columnFields, addToColumnArray]);
 
   const handleDragStart = () => {
     setIsDragging(true);
@@ -176,16 +183,13 @@ function IndividualField({
 
   const checkedValue = watch(name);
 
-  const addToColumnArray = useColumnStore((state) => state.AddToColumnArray);
-
   useEffect(() => {
     updateColumn((prev: any) =>
       prev.map((item: any) =>
         item.id === id ? { ...item, checked: checkedValue } : item
       )
     );
-    addToColumnArray(name, checkedValue);
-  }, [checkedValue, id, updateColumn, addToColumnArray, name]);
+  }, [checkedValue, id, updateColumn]);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: id });
