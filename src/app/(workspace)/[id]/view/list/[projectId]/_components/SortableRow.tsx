@@ -139,7 +139,7 @@ export function SortbaleRow({
           subTasksOpen.open && data.id === subTasksOpen.id && "bg-muted"
         )}
       >
-        <TableCell>
+        <TableCell className='w-12'>
           <div
             {...listeners}
             className={cn(

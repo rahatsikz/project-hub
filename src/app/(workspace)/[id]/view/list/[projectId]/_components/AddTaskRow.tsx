@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   dummyAssigne,
-  dummyTaskList,
   priorityOptions,
   statusOptions,
 } from "@/constant/global";
@@ -15,9 +14,11 @@ import { ComboBox } from "@/components/ui/ComboBox";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { useColumnStore } from "@/store";
 
 export default function AddTaskRow() {
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const columnArray = useColumnStore((state) => state.ColumnArr);
 
   const containerRef = useRef<HTMLTableRowElement>(null);
 
@@ -78,7 +79,7 @@ export default function AddTaskRow() {
     <TableRow ref={containerRef}>
       <TableCell className='group-hover:bg-transparent'></TableCell>
       <TableCell
-        colSpan={Object.keys(dummyTaskList[0]).length}
+        colSpan={columnArray.length}
         className='group-hover:bg-transparent'
       >
         <Form {...form}>
@@ -127,6 +128,7 @@ export function AddSubTaskRow({
   mainRowId: string;
 }) {
   const [isAddingTask, setIsAddingTask] = useState(true);
+  const columnArray = useColumnStore((state) => state.ColumnArr);
 
   const containerRef = useRef<HTMLTableRowElement>(null);
 
@@ -150,7 +152,7 @@ export function AddSubTaskRow({
     <TableRow ref={containerRef} className={cn(!isAddingTask && "hidden")}>
       <TableCell className='group-hover:bg-transparent'></TableCell>
       <TableCell
-        colSpan={Object.keys(dummyTaskList[0]).length}
+        colSpan={columnArray.length}
         className='group-hover:bg-transparent'
       >
         <Form {...form}>
