@@ -21,19 +21,27 @@ const BoardPage = () => {
     const draggingId = active.id.toString();
     const draggedOn = over.id.toString();
 
-    console.log({ draggingId, draggedOn });
+    setAllTasks((prev) => {
+      const newAllTasks = prev.map((column) => {
+        const filteredTasks = column.tasks.filter(
+          (task) => task.id !== draggingId
+        );
 
-    setAllTasks((prev) =>
-      prev.map((col) => {
-        const updatedTask = col.tasks.map((card) => {
-          if (card.id === draggingId) {
-            return { ...card, status: draggedOn };
+        // Add task to the new column
+        if (column.id === draggedOn) {
+          const draggedTask = prev
+            .flatMap((c) => c.tasks)
+            .find((task) => task.id === draggingId);
+
+          if (draggedTask) {
+            filteredTasks.push({ ...draggedTask, status: draggedOn });
           }
-          return card;
-        });
-        return { ...col, tasks: updatedTask };
-      })
-    );
+        }
+        return { ...column, tasks: filteredTasks };
+      });
+
+      return newAllTasks;
+    });
   };
 
   const [isClient, setIsClient] = useState(false);
@@ -46,8 +54,8 @@ const BoardPage = () => {
 
   return (
     <div>
-      <div className='flex gap-4'>
-        <DndContext onDragEnd={handleDragEnd}>
+      <DndContext onDragEnd={handleDragEnd}>
+        <div className='flex gap-4'>
           {allTasks.map((item) => (
             <Column
               key={item.id}
@@ -56,8 +64,8 @@ const BoardPage = () => {
               tasks={item.tasks}
             />
           ))}
-        </DndContext>
-      </div>
+        </div>
+      </DndContext>
     </div>
   );
 };
