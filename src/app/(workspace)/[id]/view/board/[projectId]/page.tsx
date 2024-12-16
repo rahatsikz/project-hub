@@ -2,7 +2,12 @@
 import { dummyTaskList, statusOptions } from "@/constant/global";
 import React, { useEffect, useState } from "react";
 import Column from "./_components/Column";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+} from "@dnd-kit/core";
 
 const BoardPage = () => {
   const groupedTasks = statusOptions.map((item) => ({
@@ -44,6 +49,14 @@ const BoardPage = () => {
     });
   };
 
+  const sensors = [
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  ];
+
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -54,7 +67,7 @@ const BoardPage = () => {
 
   return (
     <div>
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div className='flex gap-4'>
           {allTasks.map((item) => (
             <Column
