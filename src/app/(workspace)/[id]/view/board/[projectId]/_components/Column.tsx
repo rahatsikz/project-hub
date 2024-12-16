@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "./Card";
 import { useDroppable } from "@dnd-kit/core";
+import { rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 
 const Column = ({
   id,
@@ -21,11 +22,16 @@ const Column = ({
       className='border-2 border-muted-foreground min-h-96 min-w-96 py-3 px-4 rounded'
     >
       <h1 className='text-lg'>{title}</h1>
-      <div className='space-y-4 mt-3'>
-        {tasks.map((task) => (
-          <Card key={task.id} task={task} />
-        ))}
-      </div>
+      <SortableContext
+        items={tasks.map((task) => task.id)}
+        strategy={rectSortingStrategy}
+      >
+        <div className='space-y-4 mt-3'>
+          {tasks.map((task) => (
+            <Card key={task.id} task={task} />
+          ))}
+        </div>
+      </SortableContext>
     </div>
   );
 };

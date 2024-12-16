@@ -1,18 +1,26 @@
 import { cn } from "@/lib/utils";
-import { useDraggable } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
 import { GripIcon } from "lucide-react";
 import React from "react";
 
 const Card = ({ task }: { task: any }) => {
-  const { setNodeRef, attributes, listeners, transform, isDragging } =
-    useDraggable({
-      id: task.id,
-    });
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    isDragging,
+    transition,
+  } = useSortable({
+    id: task.id,
+  });
 
   const style = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
+    transition,
+    opacity: isDragging ? 0 : 1,
   };
 
   return (
