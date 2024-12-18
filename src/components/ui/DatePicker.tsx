@@ -42,6 +42,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
+                    id={props.id}
                     variant={"outline"}
                     className={cn(
                       "justify-start text-left font-normal border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background  bg-transparent",

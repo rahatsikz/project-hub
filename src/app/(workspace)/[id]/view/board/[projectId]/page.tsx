@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { GripIcon } from "lucide-react";
+import { CardForm } from "./_components/Card";
 
 const BoardPage = () => {
   const groupedTasks = statusOptions.map((item) => ({
@@ -164,9 +165,12 @@ export default BoardPage;
 
 const Card = ({ task }: { task: any }) => {
   return (
-    <div className='bg-muted h-16 flex gap-3 items-center pl-4 rounded ring-2 ring-primary'>
-      <GripIcon className='cursor-grabbing' />
-      <p className='text-sm'>{task.name}</p>
+    <div className='bg-muted min-h-16 flex flex-col gap-3 p-4 rounded ring-2 ring-primary'>
+      <div className='flex items-center gap-3'>
+        <GripIcon className='cursor-grabbing size-4' />
+        <p className='text-sm font-medium'>{task.name}</p>
+      </div>
+      <CardForm task={task} />
     </div>
   );
 };

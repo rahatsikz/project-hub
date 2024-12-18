@@ -57,6 +57,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
+                    id={props.id}
                     variant='outline'
                     className={cn(
                       "w-fit justify-start border-0 shadow-none hover:ring-2 hover:ring-primary hover:bg-background bg-transparent",

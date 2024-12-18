@@ -67,6 +67,7 @@ export const ComboBox = React.forwardRef<HTMLDivElement, ComboBoxProps>(
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
+                    id={props.id}
                     title={name.slice(0, 1).toUpperCase() + name.slice(1)}
                     variant='outline'
                     className={cn(
