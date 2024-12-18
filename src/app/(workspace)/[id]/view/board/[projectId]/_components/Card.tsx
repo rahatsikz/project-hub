@@ -1,18 +1,12 @@
-import { ComboBox } from "@/components/ui/ComboBox";
-import { DatePicker } from "@/components/ui/DatePicker";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { MultiSelect, OptionProps } from "@/components/ui/MultiSelect";
-import {
-  dummyAssigne,
-  priorityOptions,
-  statusOptions,
-} from "@/constant/global";
 import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
-import { Flag, GripIcon, User } from "lucide-react";
+import { GripIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { formConfig } from "./FieldConfig";
+import { renderField } from "./RenderField";
 
 const Card = ({ task }: { task: any }) => {
   const {
@@ -93,83 +87,20 @@ export function CardForm({
     },
   });
 
-  const formArr = [
-    {
-      inputType: "multiselect",
-      name: "assignee",
-      label: "Assignee",
-      options: dummyAssigne,
-      icon: <User />,
-      classNames: "px-2.5 py-2",
-    },
-    {
-      inputType: "combobox",
-      name: "priority",
-      label: "Priority",
-      options: priorityOptions,
-      icon: <Flag />,
-      classNames: "px-2.5 py-2",
-    },
-    {
-      inputType: "datepicker",
-      name: "dueDate",
-      label: "Due Date",
-      options: [],
-      icon: <></>,
-      classNames: "px-2.5 py-2",
-    },
-    {
-      inputType: "combobox",
-      name: "status",
-      label: "Status",
-      options: statusOptions,
-      icon: <></>,
-      classNames: "px-2.5 py-2",
-    },
-  ];
-
   return (
     <Form {...form}>
       <form className='space-y-0.5' onFocus={onFocus} onBlur={onBlur}>
-        {formArr.map((item, index) => (
+        {formConfig.map((item, index) => (
           <div className='flex items-center w-9/12 gap-3' key={index}>
             <Label
               htmlFor={item.name + task.id}
-              className='text-muted-foreground w-20 '
+              className='text-muted-foreground w-20'
             >
               {item.label}
             </Label>
-            {item.inputType === "multiselect" && (
-              <MultiSelect
-                id={item.name + task.id}
-                formControl={form.control}
-                name={item.name}
-                options={item.options as OptionProps[]}
-                icon={item.icon}
-                className={item.classNames}
-              />
-            )}
-            {item.inputType === "combobox" && (
-              <ComboBox
-                id={item.name + task.id}
-                formControl={form.control}
-                name={item.name}
-                options={item.options}
-                icon={item.icon}
-                className={item.classNames}
-              />
-            )}
-            {item.inputType === "datepicker" && (
-              <DatePicker
-                id={item.name + task.id}
-                formController={form.control}
-                name={item.name}
-                className={item.classNames}
-              />
-            )}
+            {renderField(item, form.control, task.id)}
           </div>
         ))}
-        {/* </div> */}
       </form>
     </Form>
   );
