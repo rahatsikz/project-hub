@@ -75,7 +75,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                           .map((option: OptionProps, idx: number) => (
                             <span
                               key={idx}
-                              className='text-xs bg-primary rounded-full size-7 flex items-center justify-center text-white'
+                              className='text-xs bg-accent rounded-full size-7 flex items-center justify-center text-foreground'
                             >
                               {option.acronym || option.label}
                             </span>
@@ -146,7 +146,7 @@ function OptionList({
               <label key={item.id} htmlFor={item.value}>
                 <CommandItem className='flex items-center justify-between cursor-pointer'>
                   <div className='flex items-center gap-2'>
-                    <span className='text-xs bg-primary rounded-full size-7 flex items-center justify-center text-white'>
+                    <span className='text-xs bg-accent rounded-full size-7 flex items-center justify-center text-foreground'>
                       {item.acronym}
                     </span>
                     <span>{item.label}</span>
