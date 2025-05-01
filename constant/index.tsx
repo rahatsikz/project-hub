@@ -1,3 +1,4 @@
+import { addDays } from "date-fns";
 import {
   CircleCheckBig,
   CircleDashed,
@@ -86,7 +87,7 @@ export const dummyTaskList = [
     id: crypto.randomUUID(),
     name: "Task 1",
     assignee: dummyAssigne[0],
-    dueDate: "",
+    dueDate: addDays(new Date(), 3),
     priority: priorityOptions[1].value,
     status: statusOptions[1].value,
     comments: [
@@ -135,7 +136,7 @@ export const dummyTaskList = [
     id: crypto.randomUUID(),
     name: "Task 3",
     assignee: [],
-    dueDate: "",
+    dueDate: new Date(),
     priority: "",
     status: statusOptions[0].value,
     comments: [],

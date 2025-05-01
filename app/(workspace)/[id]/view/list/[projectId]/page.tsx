@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ListSection from "./_components/ListSection";
-import { dummyTaskList, statusOptions } from "@/constant/global";
+import { dummyTaskList, statusOptions } from "@/constant";
 import FilterBar from "./_components/FilterBar";
 
 export default function ProjectPage() {

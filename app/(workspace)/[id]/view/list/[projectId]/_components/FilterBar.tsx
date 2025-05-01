@@ -3,7 +3,7 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Grid2X2, GripVertical, Layers } from "lucide-react";
 import { Select } from "@/components/ui/Select";
-import { dummyFields, groupOptions } from "@/constant/global";
+import { dummyFields, groupOptions } from "@/constant";
 import {
   Sheet,
   SheetContent,
@@ -71,7 +71,7 @@ const FilterBar = () => {
   };
 
   return (
-    <div>
+    <div className='mt-0.5 ml-0.5'>
       <Form {...form}>
         <form className='flex gap-4 items-center'>
           <Select

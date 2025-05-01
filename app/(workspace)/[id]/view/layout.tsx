@@ -1,5 +1,6 @@
 import React from "react";
 import ViewTabs from "./_components/view-tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function ProjectBoardLayout({
   children,
@@ -11,9 +12,11 @@ export default function ProjectBoardLayout({
       <div className='col-span-2 hidden lg:block'>
         <div className='px-6 py-16'>Sidebar</div>
       </div>
-      <div className=' col-span-12 lg:col-span-10 mx-4 mb-6 mt-12 rounded-xl bg-background h-[calc(100vh-72px)] overflow-y-auto'>
+      <div className=' col-span-12 lg:col-span-10 mx-4 mb-6 mt-12 rounded-xl bg-background  '>
         <ViewTabs />
-        <div className='px-8 py-6'>{children}</div>
+        <ScrollArea className='px-8 py-6 h-[calc(100vh-140px)]'>
+          {children}
+        </ScrollArea>
       </div>
     </div>
   );

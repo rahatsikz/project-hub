@@ -1,8 +1,4 @@
-import {
-  dummyAssigne,
-  priorityOptions,
-  statusOptions,
-} from "@/constant/global";
+import { dummyAssigne, priorityOptions, statusOptions } from "@/constant";
 import { Flag, User } from "lucide-react";
 
 export const formConfig = [

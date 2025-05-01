@@ -7,11 +7,7 @@ import { TableCell } from "@/components/ui/table";
 import { UseFormReturn } from "react-hook-form";
 import { Flag, MessageCircle, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  dummyAssigne,
-  priorityOptions,
-  statusOptions,
-} from "@/constant/global";
+import { dummyAssigne, priorityOptions, statusOptions } from "@/constant";
 import { Button } from "@/components/ui/button";
 
 export const cellOfRows = (
