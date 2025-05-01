@@ -1,7 +1,8 @@
 import React from "react";
+import { CalendarView } from "./_components/calendar-view";
 
 const CalendarPage = () => {
-  return <div>It&apos;s Calendar</div>;
+  return <CalendarView />;
 };
 
 export default CalendarPage;
