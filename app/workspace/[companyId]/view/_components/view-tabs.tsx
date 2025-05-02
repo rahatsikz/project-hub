@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 export default function ViewTabs() {
   const router = useRouter();
-  const { id, projectId } = useParams();
+  const { companyId, projectId } = useParams();
 
   const tabsArr = [
     {
@@ -27,14 +27,14 @@ export default function ViewTabs() {
   ];
 
   const handleNavigate = (path: string) => {
-    router.push(`/${id}/view/${path}/${projectId}`);
+    router.push(`/workspace/${companyId}/view/${path}/${projectId}`);
     localStorage.setItem("view", path);
   };
 
-  useEffect(() => {
-    const view = localStorage.getItem("view") || "list";
-    router.push(`/${id}/view/${view}/${projectId}`);
-  }, [router, id, projectId]);
+  // useEffect(() => {
+  //   const view = localStorage.getItem("view") || "list";
+  //   router.push(`/${id}/view/${view}/${projectId}`);
+  // }, [router, id, projectId]);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -49,9 +49,9 @@ export default function ViewTabs() {
   return (
     <Tabs
       defaultValue={localStorage.getItem("view") || "list"}
-      className='py-2'
+      className='py-0'
     >
-      <TabsList className='bg-transparent justify-start border-b-2 border-input rounded-none w-full px-6 py-1 gap-1.5 h-12'>
+      <TabsList className='bg-transparent justify-start border-b border-input rounded-none w-full px-6 py-1 gap-1.5 h-12'>
         {tabsArr.map((tab) => (
           <TabsTrigger
             key={tab.route}
