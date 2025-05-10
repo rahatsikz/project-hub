@@ -25,7 +25,7 @@ export default function ProjectBoardLayout({
       <Suspense>
         <section className='w-full'>
           <SidebarHeader />
-          <ScrollArea className='h-[calc(100dvh-128px)] pb-6 bg-background md:h-[calc(100dvh-72.5px)]'>
+          <ScrollArea className='h-[calc(100dvh-128px)] pb-6 bg-background md:h-[calc(100dvh-72.5px)] px-8 py-6'>
             <div>{children}</div>
           </ScrollArea>
         </section>
